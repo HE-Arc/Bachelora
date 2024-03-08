@@ -12,11 +12,61 @@ const router = createRouter({
     {
       path: '/about',
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue')
-    }
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: HomeView // TODO LoginView
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: HomeView // TODO RegisterView
+    },
+    {
+      path: '/logout',
+      name: 'logout',
+      component: HomeView // TODO LogoutView
+    },
+    {
+      path: '/account',
+      name: 'account',
+      component: HomeView // TODO AccountView
+    },
+    {
+      path: '/list-bachelors',
+      name: 'list-bachelors',
+      component: HomeView // TODO ListBachelorView
+    },
+    {
+      path: '/list-bachelors/create',
+      name: 'list-bachelors.create',
+      component: HomeView // TODO ListBachelorCreateView
+    },
+    {
+      path: '/list-bachelors/edit',
+      name: 'list-bachelors.edit',
+      component: HomeView // TODO ListBachelorEditView
+    },
+    {
+      path: '/list-bachelors/delete',
+      name: 'list-bachelors.delete',
+      component: HomeView // TODO ListBachelorDeleteView
+    },
+    {
+      path: '/chosen-bachelors',
+      name: 'chosen-bachelors',
+      component: HomeView // TODO ChosenBachelorView
+    },
+    {
+      path: '/404',
+      component: HomeView // TODO 404View
+    },
+    {
+        path: '/:catchAll(.*)',
+        redirect: '/404'
+    },
   ]
 })
 
