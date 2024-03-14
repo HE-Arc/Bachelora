@@ -48,7 +48,7 @@
       icon="menu"
       />
       <q-toolbar-title class="title ubuntu-bold">
-        Bachelora
+        <router-link :to="{ name: 'home'}" class="ubuntu-bold text-white">Bachelora</router-link>
       </q-toolbar-title>
     </q-toolbar>
   </q-header>
