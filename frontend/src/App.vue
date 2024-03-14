@@ -1,20 +1,30 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import Header from "@/components/NavBar.vue";
 </script>
 
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-page-container>
       <Header />
-      <HelloWorld />
-
+      <main>
+        <router-view v-slot="{ Component }">
+          <transition name="fade" mode="out-in">
+            <component :is="Component" />
+          </transition>
+        </router-view>
+      </main>
     </q-page-container>
   </q-layout>
 </template>
 
-<script setup>
+<style lang="scss">
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.5s ease;
+  }
 
-import HelloWorld from './components/HelloWorld.vue'
-import Header from "@/components/Header.vue";
-</script>
+  .fade-enter-from,
+  .fade-leave-to {
+    opacity: 0;
+  }
+</style>
