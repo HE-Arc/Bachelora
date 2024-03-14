@@ -5,59 +5,76 @@
   const email = ref('');
   const password = ref('');
   const showPassword = ref(true)
+
+  const requiredField = (val) => {
+    return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(!!val || 'Ce champ est requis')
+          }, 1000)
+        })
+  };
+
+  const success = ref(false);
+  const onSubmit = async() => {
+      try {
+        success.value = false;
+
+        // TODO call route
+        //success.value = true;
+      } catch (e) {
+        console.log(e);
+      }
+  }
 </script>
 
 <template>
-  <ul>
-    <li>
-      <q-input color="primary" v-model="email" label="Adresse e-mail">
-        <template v-slot:prepend>
-          <q-icon name="mail" />
-        </template>
-      </q-input>
-    </li>
+  <q-form
+      @submit="onSubmit"
+      class="q-gutter-md"
+    >
+    <ul class="form">
+      <li class="form-item">
+        <q-input color="primary"
+                 v-model="email"
+                 label="Adresse e-mail"
+                 :rules="[requiredField]">
+          <template v-slot:prepend>
+            <q-icon name="mail" />
+          </template>
+        </q-input>
+      </li>
 
-    <li>
-      <q-input v-model="password" :type="showPassword ? 'password' : 'text'" label="Mot de passe">
-        <template v-slot:prepend>
-          <q-icon name="password" />
-        </template>
-        <template v-slot:append>
-          <q-icon
-            :name="showPassword ? 'visibility_off' : 'visibility'"
-            class="cursor-pointer"
-            @click="showPassword = !showPassword"
-          />
-        </template>
-      </q-input>
-    </li>
+      <li class="form-item">
+        <q-input v-model="password"
+                 :type="showPassword ? 'password' : 'text'"
+                 label="Mot de passe"
+                 :rules="[requiredField]">
+          <template v-slot:prepend>
+            <q-icon name="password" />
+          </template>
+          <template v-slot:append>
+            <q-icon
+              :name="showPassword ? 'visibility_off' : 'visibility'"
+              class="cursor-pointer"
+              @click="showPassword = !showPassword"
+            />
+          </template>
+        </q-input>
+      </li>
 
-    <li>
-      <PrimaryButton text="Connexion" />
-    </li>
+      <li class="form-item">
+        <PrimaryButton text="Connexion" />
+      </li>
 
-    <li>
-      <p class="text-center">Pas de compte ?
-        <router-link class="text-secondary text-bold" :to="{ name : 'register' }">Inscrivez-vous !</router-link>
-      </p>
-    </li>
-  </ul>
+      <li class="form-item">
+        <p class="text-center">Pas de compte ?
+          <router-link class="text-secondary text-bold" :to="{ name : 'register' }">Inscrivez-vous !</router-link>
+        </p>
+      </li>
+    </ul>
+  </q-form>
 </template>
 
 <style scoped lang="scss">
 
-  ul {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    li {
-      padding: 1rem;
-      max-width: 100%;
-      min-width: 100%;
-    }
-  }
 </style>
