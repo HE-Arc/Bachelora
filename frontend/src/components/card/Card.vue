@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="q-pa-md row items-start q-gutter-md">
+  <!--<div class="q-pa-md row items-start q-gutter-md">-->
     <q-card :key="bachelor" class="my-card" flat bordered >
       <q-card-section horizontal>
         <q-card-section class="q-pt-xs">
@@ -30,7 +30,7 @@
         <q-btn flat round icon="delete" color="red" />
       </q-card-actions>
     </q-card>
-  </div>
+  <!--</div>-->
 </template>
 
 <style scoped lang="scss">
