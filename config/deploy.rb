@@ -3,6 +3,7 @@ lock "~> 3.18.1"
 
 set :application, "Bachelora"
 set :repo_url, "https://github.com/HE-Arc/Bachelora.git"
+append :linked_files, '.env'
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
