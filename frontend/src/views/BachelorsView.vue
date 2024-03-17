@@ -18,17 +18,41 @@ const tagsOptions = [
     "Dev web"
 ];
 
+const toggleBachelorsDisplayStyle = (e) => {
+  const elementClicked = e.target;
+
+  document.querySelectorAll(".bachelors-style").forEach(element => {
+    element.classList.remove("active");
+  });
+
+  const bachelors = document.querySelector("#bachelors");
+
+  if(elementClicked.classList.contains("grid")) {
+    elementClicked.classList.add("active");
+    bachelors.classList.add("bachelors-grid");
+  } else {
+    elementClicked.classList.add("active");
+    bachelors.classList.remove("bachelors-grid");
+  }
+};
+
+
 </script>
 
 <template>
   <section>
     <Title text="Liste des travaux de bachelors"/>
 
-    <SecondaryButton text="Ajouter un travail de bachelor" icon="add"/>
+    <SecondaryButton class="space center" dashed link="bachelors.create" text="Ajouter un travail de bachelor" icon="add"/>
 
-    <MultiChipsSelect icon="filter_alt" label="Tags" :options="tagsOptions" />
+    <MultiChipsSelect class="space center" icon="filter_alt" label="Tags" :options="tagsOptions" />
 
-    <ul class="list-bachelors">
+    <ul class="space bachelors-display-style">
+      <li><q-icon class="bachelors-style grid" size="md" @click="toggleBachelorsDisplayStyle" name="grid_view" /></li>
+      <li><q-icon class="bachelors-style active list" size="md" @click="toggleBachelorsDisplayStyle" name="list" /></li>
+    </ul>
+    
+    <ul id="bachelors" class="bachelors">
       <li class="item-bachelor" v-for="card in 10" :key="card"><Card /></li>
     </ul>
 
@@ -45,7 +69,16 @@ const tagsOptions = [
 
 <style scoped lang="scss">
 
-  .list-bachelors {
+  .space {
+    padding: 1rem 0;
+  }
+
+  .center {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .bachelors {
     margin-top: 2rem;
     padding: 0;
     list-style: none;
@@ -54,5 +87,45 @@ const tagsOptions = [
     align-items: center;
     justify-content: center;
     gap: 2rem;
+  }
+
+  .bachelors-display-style {
+    display: none;
+  }
+
+  @media only screen and (min-width: 768px) {
+
+    // Toggle grid / list view
+    .bachelors-display-style {
+      display: flex;
+      align-items: center;
+      justify-content: end;
+      gap: 0.25rem;
+
+      .bachelors-style {
+        border: solid 1px $secondary;
+        color: $secondary;
+        padding: 0.25rem;
+        border-radius: 3px;
+      }
+
+      .active {
+        background-color: $secondary;
+        color: white;
+      }
+    }
+
+    .bachelors-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+  }
+
+  @media only screen and (min-width: 1024px) {
+    .bachelors-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+    }
   }
 </style>

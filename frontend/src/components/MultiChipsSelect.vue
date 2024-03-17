@@ -39,7 +39,4 @@
 </template>
 
 <style scoped lang="scss">
-  .chips-items {
-    margin: 2rem 0;
-  }
 </style>

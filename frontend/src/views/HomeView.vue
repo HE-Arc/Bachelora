@@ -35,9 +35,25 @@ const devsTeam = [
       </q-list>
     </section>
 
-    <section>
+    <section class="btns">
       <PrimaryButton link="login" text="Connexion" />
       <PrimaryButton link="register" text="Inscription" />
     </section>
   </div>
 </template>
+
+<style scoped lang="scss">
+  @media only screen and (min-width: 1024px) {
+    .btns {
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+
+      .q-btn {
+        min-width: 40%;
+        max-width: 40%;
+      }
+    }
+  }
+
+</style>

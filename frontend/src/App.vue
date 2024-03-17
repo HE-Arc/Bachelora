@@ -3,9 +3,9 @@ import NavBar from "@/components/NavBar.vue";
 </script>
 
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout view="lHh LpR lFf">
+    <NavBar />
     <q-page-container>
-      <NavBar />
       <main>
         <router-view v-slot="{ Component }">
           <transition name="fade" mode="out-in">
@@ -26,5 +26,9 @@ import NavBar from "@/components/NavBar.vue";
   .fade-enter-from,
   .fade-leave-to {
     opacity: 0;
+  }
+
+  #app {
+    grid-template-columns: 1fr;
   }
 </style>
