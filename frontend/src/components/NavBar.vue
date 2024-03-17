@@ -11,7 +11,7 @@
     },
     {
       icon: 'school',
-      name: 'list-bachelors',
+      name: 'bachelors',
       label: 'Liste des travaux de bachelor',
       separator: false
     },
