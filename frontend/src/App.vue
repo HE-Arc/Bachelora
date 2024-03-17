@@ -1,11 +1,11 @@
 <script setup>
-import Header from "@/components/NavBar.vue";
+import NavBar from "@/components/NavBar.vue";
 </script>
 
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-page-container>
-      <Header />
+      <NavBar />
       <main>
         <router-view v-slot="{ Component }">
           <transition name="fade" mode="out-in">

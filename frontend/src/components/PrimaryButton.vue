@@ -12,8 +12,8 @@
 </script>
 
 <template>
-  <q-btn v-if="link" color="primary" class="btn-primary" :to="{ name : props.link }" size="md" :label="props.text" />
-  <q-btn v-else color="primary" class="btn-primary" size="md" :label="props.text" />
+  <q-btn v-if="link" color="primary" class="btn btn-primary" :to="{ name : props.link }" size="md" :label="props.text" />
+  <q-btn v-else color="primary" class="btn btn-primary" size="md" :label="props.text" />
 </template>
 
 <style scoped lang="scss">

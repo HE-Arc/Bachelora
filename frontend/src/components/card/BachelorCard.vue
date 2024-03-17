@@ -3,8 +3,7 @@
 </script>
 
 <template>
-  <!--<div class="q-pa-md row items-start q-gutter-md">-->
-    <q-card :key="bachelor" class="my-card" flat bordered >
+    <q-card flat bordered>
       <q-card-section horizontal>
         <q-card-section class="q-pt-xs">
           <div class="text-overline">Proposée par entreprise</div>
@@ -16,7 +15,7 @@
           <div class="text-overline">Enseignat ayant entré le travail</div>
 
           <div>
-            <q-chip v-for="item in 5" color="secondary" :key="item" text-color="white">
+            <q-chip v-for="item in 5" :key="item">
               IA
             </q-chip>
           </div>
@@ -26,13 +25,29 @@
       <q-separator />
 
       <q-card-actions align="around">
-        <q-btn flat icon="edit" color="primary"/>
-        <q-btn flat round icon="delete" color="red" />
+        <q-btn class="btn-edit" flat icon="edit" color="primary" />
+        <q-btn class="btn-delete" flat icon="delete" color="red" />
       </q-card-actions>
     </q-card>
-  <!--</div>-->
 </template>
 
 <style scoped lang="scss">
 
+  .q-btn {
+    min-width: 48%;
+    max-width: 48%;
+  }
+
+  .btn-edit {
+    background-color: #DDF7FC;
+  }
+
+  .btn-delete {
+    background-color: #FBD6DB;
+  }
+
+  .q-card--bordered,
+  .q-separator {
+    border-color: $primary;
+  }
 </style>

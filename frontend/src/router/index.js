@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from "@/views/LoginView.vue";
 import RegisterView from "@/views/RegisterView.vue";
-import Bachelors from "@/views/BachelorsView.vue";
 import BachelorsView from "@/views/BachelorsView.vue";
 
 const router = createRouter({
@@ -34,23 +33,23 @@ const router = createRouter({
       component: HomeView // TODO AccountView
     },
     {
-      path: '/list-bachelors',
-      name: 'list-bachelors',
+      path: '/bachelors',
+      name: 'bachelors',
       component: BachelorsView
     },
     {
-      path: '/list-bachelors/create',
-      name: 'list-bachelors.create',
+      path: '/bachelors/create',
+      name: 'bachelors.create',
       component: HomeView // TODO ListBachelorCreateView
     },
     {
-      path: '/list-bachelors/edit',
-      name: 'list-bachelors.edit',
+      path: '/bachelors/edit',
+      name: 'bachelors.edit',
       component: HomeView // TODO ListBachelorEditView
     },
     {
-      path: '/list-bachelors/delete',
-      name: 'list-bachelors.delete',
+      path: '/bachelors/delete',
+      name: 'bachelors.delete',
       component: HomeView // TODO ListBachelorDeleteView
     },
     {
