@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import LoginView from "@/views/LoginView.vue";
 import RegisterView from "@/views/RegisterView.vue";
 import BachelorsView from "@/views/BachelorsView.vue";
+import CreateBachelorView from "@/views/CreateBachelorView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,7 +41,7 @@ const router = createRouter({
     {
       path: '/bachelors/create',
       name: 'bachelors.create',
-      component: HomeView // TODO ListBachelorCreateView
+      component: CreateBachelorView
     },
     {
       path: '/bachelors/edit',
