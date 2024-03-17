@@ -1,7 +1,7 @@
 <script setup>
   import {ref} from "vue";
 
-  const leftDrawerOpen = ref(null)
+  const leftDrawerOpen = ref(false);
   const menuList = [
     {
       icon: 'home',
@@ -55,7 +55,7 @@
 
   <q-drawer
   v-model="leftDrawerOpen"
-  show-if-above
+  v-show="leftDrawerOpen"
   :breakpoint="500"
   bordered
   >
