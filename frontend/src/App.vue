@@ -3,7 +3,7 @@ import NavBar from "@/components/NavBar.vue";
 </script>
 
 <template>
-  <q-layout view="lHh LpR lFf">
+  <q-layout view="lHh LpR lFf" style="min-height: 95vh">
     <NavBar />
     <q-page-container>
       <main>

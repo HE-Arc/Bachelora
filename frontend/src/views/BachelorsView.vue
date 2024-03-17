@@ -26,13 +26,16 @@ const toggleBachelorsDisplayStyle = (e) => {
   });
 
   const bachelors = document.querySelector("#bachelors");
+  const btnBachelorsDisplay = document.querySelector(".bachelors-display-style");
 
   if(elementClicked.classList.contains("grid")) {
     elementClicked.classList.add("active");
     bachelors.classList.add("bachelors-grid");
+    btnBachelorsDisplay.classList.remove("center");
   } else {
     elementClicked.classList.add("active");
     bachelors.classList.remove("bachelors-grid");
+    btnBachelorsDisplay.classList.add("center");
   }
 };
 
@@ -47,7 +50,7 @@ const toggleBachelorsDisplayStyle = (e) => {
 
     <MultiChipsSelect class="space center" icon="filter_alt" label="Tags" :options="tagsOptions" />
 
-    <ul class="space bachelors-display-style">
+    <ul class="space bachelors-display-style center">
       <li><q-icon class="bachelors-style grid" size="md" @click="toggleBachelorsDisplayStyle" name="grid_view" /></li>
       <li><q-icon class="bachelors-style active list" size="md" @click="toggleBachelorsDisplayStyle" name="list" /></li>
     </ul>
