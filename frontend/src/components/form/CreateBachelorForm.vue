@@ -105,17 +105,29 @@ const requiredField = (val) => {
         <MultiChipsSelect :options="tagsOptions" label="Tags" icon="sell" />
       </li>
 
-      <li class="form-item">
-        <PrimaryButton text="Ajouter" />
-      </li>
-
-      <li class="form-item">
-        <SecondaryButton text="Annuler" link="bachelors" />
+      <li class="form-item btns">
+        <PrimaryButton class="btn-action" text="Ajouter" />
+        <SecondaryButton class="btn-action" text="Annuler" link="bachelors" />
       </li>
     </ul>
   </q-form>
 </template>
 
 <style scoped lang="scss">
+  .btn-action {
+      margin: 1rem 0;
+  }
 
+  @media only screen and (min-width: 1024px) {
+    .btns {
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+
+      .btn-action {
+        min-width: 45%;
+        max-width: 45%;
+      }
+    }
+  }
 </style>

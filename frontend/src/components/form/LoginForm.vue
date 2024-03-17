@@ -35,6 +35,7 @@
     <ul class="form">
       <li class="form-item">
         <q-input color="primary"
+                 autofocus
                  v-model="email"
                  label="Adresse e-mail"
                  :rules="[requiredField]">

@@ -49,7 +49,12 @@
     >
     <ul class="form">
       <li class="form-item">
-        <q-input color="primary" v-model="lastname" label="Nom" :rules="[requiredField]">
+        <q-input color="primary"
+                 v-model="lastname"
+                 label="Nom"
+                 :rules="[requiredField]"
+                 autofocus
+        >
           <template v-slot:prepend>
             <q-icon name="person" />
           </template>

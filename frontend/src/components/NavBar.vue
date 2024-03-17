@@ -10,6 +10,18 @@
       separator: true
     },
     {
+      icon: 'login',
+      name: 'login',
+      label: 'Connexion',
+      separator: false
+    },
+    {
+      icon: 'app_registration',
+      name: 'register',
+      label: 'Inscription',
+      separator: true
+    },
+    {
       icon: 'school',
       name: 'bachelors',
       label: 'Liste des travaux de bachelor',
