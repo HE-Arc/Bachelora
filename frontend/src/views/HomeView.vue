@@ -35,6 +35,10 @@ const devsTeam = [
       </q-list>
     </section>
 
+    <section class="text-center">
+      <div>Favicon made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik"> Freepik </a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com'</a></div>
+    </section>
+
     <section class="btns">
       <PrimaryButton link="login" text="Connexion" />
       <PrimaryButton link="register" text="Inscription" />
