@@ -5,6 +5,7 @@ import Title from "@/components/Title.vue";
 import Card from "@/components/card/BachelorCard.vue";
 import SecondaryButton from "@/components/SecondaryButton.vue";
 import MultiChipsSelect from "@/components/MultiChipsSelect.vue";
+import DeleteBachelorForm from "@/components/form/DeleteBachelorForm.vue";
 
 const currentPage = ref(1);
 
@@ -54,6 +55,13 @@ const toggleBachelorsDisplayStyle = (e) => {
       <li><q-icon class="bachelors-style grid" size="md" @click="toggleBachelorsDisplayStyle" name="grid_view" /></li>
       <li><q-icon class="bachelors-style active list" size="md" @click="toggleBachelorsDisplayStyle" name="list" /></li>
     </ul>
+
+    <DeleteBachelorForm
+        title="Suppression d'un travail de bachelor"
+        icon="dangerous"
+        text="Attention ! Vous êtes sur le point de supprimer le travail xx. Cette action est irréversible !"
+        btn-text-submit="Oui, supprimer"
+        btn-text-cancel="Non, annuler"/>
     
     <ul id="bachelors" class="bachelors">
       <li class="item-bachelor" v-for="card in 10" :key="card"><Card /></li>
