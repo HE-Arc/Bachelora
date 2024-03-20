@@ -20,7 +20,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/HE-Arc/Bachelora">
-    <img src="calm-webserver/public/favicon.png" alt="Logo" width="80" height="80">
+    <img src="frontend/public/favicon.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">Bachelora</h3>
