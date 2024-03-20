@@ -3,7 +3,6 @@ lock "~> 3.18.1"
 
 set :application, "Bachelora"
 set :repo_url, "https://github.com/HE-Arc/Bachelora.git"
-append :linked_files, '.env'
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
@@ -38,3 +37,16 @@ append :linked_files, '.env'
 
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
+
+# Créer un lien symbolique vers le fichier .env dans le répertoire current/backend
+namespace :deploy do
+    desc 'Create symlink for .env file'
+    task :create_env_symlink do
+      on roles(:app) do
+        execute "ln -sf #{shared_path}/.env #{release_path}/backend/.env"
+      end
+    end
+  end
+  
+  # Exécuter la tâche de création du lien symbolique après le déploiement
+  after 'deploy:symlink:release', 'deploy:create_env_symlink'
