@@ -60,8 +60,21 @@ namespace :pip do
     end
 end
 
+# Ajouter la tâche d'installation de Sass au déploiement Vue.js
+after 'deploy:updated', 'vue:install_sass'
+namespace :vue do
+  desc 'Install Sass as a devDependency'
+  task :install_sass do
+    on roles(:web) do
+      within release_path.join('frontend') do
+        execute :npm, 'install -D sass'
+      end
+    end
+  end
+end
+
 # Construire et déployer l'application Vue.js
-after 'deploy:updated', 'vue:deploy'
+after 'vue:install_sass', 'vue:deploy'
 namespace :vue do
   desc 'Build and deploy Vue.js application'
   task :deploy do
@@ -85,17 +98,6 @@ namespace :gunicorn do
     end
 end
 
-# Ajouter la tâche d'installation de Sass au déploiement Vue.js
-after 'deploy:published', 'vue:install_sass'
-namespace :vue do
-  desc 'Install Sass as a devDependency'
-  task :install_sass do
-    on roles(:web) do
-      within release_path.join('frontend') do
-        execute :npm, 'install -D sass'
-      end
-    end
-  end
-end
+
 
 
