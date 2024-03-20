@@ -84,3 +84,18 @@ namespace :gunicorn do
 	end
     end
 end
+
+# Ajouter la tâche d'installation de Sass au déploiement Vue.js
+after 'deploy:published', 'vue:install_sass'
+namespace :vue do
+  desc 'Install Sass as a devDependency'
+  task :install_sass do
+    on roles(:web) do
+      within release_path.join('frontend') do
+        execute :npm, 'install -D sass'
+      end
+    end
+  end
+end
+
+
