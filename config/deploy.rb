@@ -60,6 +60,20 @@ namespace :pip do
     end
 end
 
+# Construire et déployer l'application Vue.js
+after 'deploy:updated', 'vue:deploy'
+namespace :vue do
+  desc 'Build and deploy Vue.js application'
+  task :deploy do
+    on roles(:app) do
+      within release_path.join('frontend') do
+        execute :npm, 'install' # Installer les dépendances npm
+        execute :npm, 'run build' # Construire l'application Vue.js
+      end
+    end
+  end
+end
+
 # Redémarrer le serveur Gunicorn
 after 'deploy:publishing', 'gunicorn:restart'
 namespace :gunicorn do
