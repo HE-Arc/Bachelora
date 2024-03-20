@@ -5,7 +5,7 @@
 
 server "157.26.64.211", user: "django", roles: %w{app db web}, port: 31509
 
-set :deploy_to, "/home/django/.project-default/"
+set :deploy_to, "/home/django/project/"
 set :branch, "main"
 
 # server "example.com", user: "deploy", roles: %w{app db web}, my_property: :my_value

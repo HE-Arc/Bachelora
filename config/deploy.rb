@@ -43,7 +43,7 @@ namespace :deploy do
     desc 'Create symlink for .env file'
     task :create_env_symlink do
       on roles(:app) do
-        execute "ln -sf #{shared_path}/.env #{release_path}/backend/.env"
+        execute "ln -sf #{shared_path}/.env #{release_path}/api/.env"
       end
     end
   end
