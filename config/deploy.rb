@@ -39,6 +39,7 @@ set :repo_url, "https://github.com/HE-Arc/Bachelora.git"
 # set :ssh_options, verify_host_key: :secure
 
 # Créer un lien symbolique vers le fichier .env dans le répertoire current/backend
+after 'deploy:symlink:release', 'deploy:create_env_symlink'
 namespace :deploy do
     desc 'Create symlink for .env file'
     task :create_env_symlink do
@@ -48,5 +49,24 @@ namespace :deploy do
     end
   end
   
-  # Exécuter la tâche de création du lien symbolique après le déploiement
-  after 'deploy:symlink:release', 'deploy:create_env_symlink'
+# Installer les dépendances Python
+after 'deploy:updating', 'pip:install'
+namespace :pip do
+    desc 'Install'
+    task :install do
+        on roles([:app, :web]) do |h|
+        execute "pip install -r #{release_path}/api/requirements.txt"
+        end
+    end
+end
+
+# Redémarrer le serveur Gunicorn
+after 'deploy:publishing', 'gunicorn:restart'
+namespace :gunicorn do
+    desc 'Restart application'
+    task :restart do
+        on roles(:web) do |h|
+	    execute :sudo, 'systemctl restart gunicorn'
+	end
+    end
+end
