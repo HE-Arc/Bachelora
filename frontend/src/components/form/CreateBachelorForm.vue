@@ -1,38 +1,81 @@
 <script setup>
 
-import { ref } from 'vue'
+import {onMounted, ref} from 'vue'
 import PrimaryButton from "@/components/PrimaryButton.vue";
 import MultiChipsSelect from "@/components/MultiChipsSelect.vue";
 import SecondaryButton from "@/components/SecondaryButton.vue";
+import axios from "axios";
 
-const title = ref('');
-const description = ref('');
-const compagny = ref('')
-const orientation = ref('');
+const title = ref(null);
+const description = ref(null);
+const teacher = ref(null)
+const orientation = ref(null);
+const tags = ref([]);
 
-const tagsOptions = [
-    "IA",
-    "Laravel",
-    "Django",
-    "Traitement d'images",
-    "Java",
-    "C++",
-    "Dev web"
-];
+const tagsItems = ref([]);
 
-const orientationOptions = [
-    "IL",
-    "IE",
-    "ID"
-];
+const fetchTagsItems = async () => {
+  const res = await axios.get("http://127.0.0.1:8000/api/tag/");
+
+  tagsItems.value = res.data;
+};
+
+const orientationItems = ref([]);
+const fetchOrientationItems = async () => {
+  const res = await axios.get("http://127.0.0.1:8000/api/orientation/");
+  orientationItems.value = res.data;
+};
+
+const teachersItems = ref([]);
+const fetchTeachersItems = async () => {
+  try {
+    const res = await axios.get("http://127.0.0.1:8000/api/teacher/");
+    teachersItems.value = res.data.map(teacher => {
+      teacher.fullname = `${teacher.first_name} ${teacher.last_name}`;
+      return {
+        id: teacher.id,
+        fullname: teacher.fullname
+      }
+    });
+  } catch (error) {
+    console.error(`Erreur lors de la récupération des enseignants : `, error);
+  }
+};
+
+onMounted(() => {
+  fetchTagsItems();
+  fetchOrientationItems();
+  fetchTeachersItems();
+});
+
+const updateBachelorsItems = (selectedTags) => {
+  tags.value = [];
+  for(const tag of selectedTags) {
+    tags.value.push(tag.id);
+  }
+}
 
 const success = ref(false);
 const onSubmit = async() => {
     try {
       success.value = false;
+      await axios.post("http://127.0.0.1:8000/api/bachelor/",
+      {
+        name: title.value,
+        description: description.value,
+        teacher: teacher.value.id,
+        orientations: [orientation.value.id],
+        tags: tags.value
+      });
+      success.value = true;
 
-      // TODO call route
-      //success.value = true;
+      // Réinitialisation des champs après l'envoi réussi
+    title.value = null;
+    description.value = null;
+    teacher.value = null;
+    orientation.value = null;
+    tags.value = [];
+
     } catch (e) {
       console.log(e);
     }
@@ -41,7 +84,7 @@ const onSubmit = async() => {
 const requiredField = (val) => {
   return new Promise((resolve, reject) => {
         setTimeout(() => {
-          resolve(!!val || 'Ce champ est requis')
+          resolve(!!val || 'Ce champ est requis');
         }, 1000)
       })
 };
@@ -82,19 +125,27 @@ const requiredField = (val) => {
       </li>
 
       <li class="form-item">
-        <q-input color="primary"
-                 v-model="compagny"
-                 label="Entreprise"
-                 type="text"
-                 :rules="[requiredField]">
+        <q-select v-model="teacher"
+                  :options="teachersItems"
+                  label="Enseignant proposant"
+                  :rules="[requiredField]"
+                  option-value="id"
+                  option-label="fullname"
+        >
           <template v-slot:prepend>
-            <q-icon name="apartment" />
+            <q-icon name="person" />
           </template>
-        </q-input>
+        </q-select>
       </li>
 
       <li class="form-item">
-        <q-select v-model="orientation" :options="orientationOptions" label="Orientation" :rules="[requiredField]">
+        <q-select v-model="orientation"
+                  :options="orientationItems"
+                  label="Orientation"
+                  :rules="[requiredField]"
+                  option-value="id"
+                  option-label="name"
+        >
           <template v-slot:prepend>
             <q-icon name="school" />
           </template>
@@ -102,11 +153,11 @@ const requiredField = (val) => {
       </li>
 
       <li class="form-item">
-        <MultiChipsSelect :options="tagsOptions" label="Tags" icon="sell" />
+        <MultiChipsSelect :options="tagsItems" label="Tags" icon="sell" @selection-changed="updateBachelorsItems" />
       </li>
 
       <li class="form-item btns">
-        <PrimaryButton class="btn-action" text="Ajouter" />
+        <PrimaryButton class="btn-action" text="Ajouter" type="submit"/>
         <SecondaryButton class="btn-action" text="Annuler" link="bachelors" />
       </li>
     </ul>

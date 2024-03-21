@@ -32,7 +32,6 @@ const updateBachelorsItems = (selectedTags) => {
   // Display all bachelors
   if (selectedTags.length === 0) {
     bachelorsItems.value = originalBachelorsItems;
-    console.log(originalBachelorsItems);
     return;
   }
 

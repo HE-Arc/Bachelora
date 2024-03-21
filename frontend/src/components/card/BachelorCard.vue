@@ -86,4 +86,12 @@
   .q-separator {
     border-color: $primary;
   }
+
+  .q-card {
+    min-width: 370px;
+
+    .card__section {
+      min-width: 200px;
+    }
+  }
 </style>
