@@ -31,7 +31,10 @@
     <a href="https://github.com/HE-Arc/Bachelora/wiki"><strong>Explore the docs »</strong></a>
     <br>
     <br>
-    <a href="https://bachelora.k8s.ing.he-arc.ch/">View Demo</a>
+    <div align="center">
+      <a href="https://bachelora.k8s.ing.he-arc.ch/">View Demo (frontend)</a> <br>
+      <a href="https://api-bachelora.k8s.ing.he-arc.ch/api/">Test API (backend)</a>
+    </div>
     <br>
   </p>
 </div>
