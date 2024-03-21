@@ -41,6 +41,34 @@ class BachelorViewSet(viewsets.ModelViewSet):
                 return Response({'error': 'Tag does not exist'}, status=404)
         else:
             return Response({'error': 'Please provide tag_id'}, status=400)
+        
+    @action(detail=True, methods=['post'])
+    def add_orientation(self, request, pk=None):
+        bachelor : Bachelor = self.get_object()
+        orientation_id : Orientation = request.data.get('orientation_id')
+        if orientation_id is not None:
+            try:
+                orientation = Orientation.objects.get(id=orientation_id)
+                bachelor.orientations.add(orientation)
+                return Response({'status': 'Orientation added successfully'}, status=200)
+            except Orientation.DoesNotExist:
+                return Response({'error': 'Orientation does not exist'}, status=404)
+        else:
+            return Response({'error': 'Please provide orientation_id'}, status=400)
+        
+    @action(detail=True, methods=['delete'])
+    def remove_orientation(self, request, pk=None):
+        bachelor : Bachelor = self.get_object()
+        orientation_id : Orientation = request.data.get('orientation_id')
+        if orientation_id is not None:
+            try:
+                orientation = Orientation.objects.get(id=orientation_id)
+                bachelor.orientations.remove(orientation)
+                return Response({'status': 'Orientation removed successfully'}, status=200)
+            except Orientation.DoesNotExist:
+                return Response({'error': 'Orientation does not exist'}, status=404)
+        else:
+            return Response({'error': 'Please provide orientation_id'}, status=400)
 
 class OrientationViewSet(viewsets.ModelViewSet):
     """
