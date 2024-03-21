@@ -164,8 +164,8 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- CONTACT -->
 ## Contact
 
-* Stéphane Oguey - [github@ylked](https://github.com/stephane-og) - [stephane.oguey@he-arc.ch](mailto:stephane.oguey@he-arc.ch?subject=[GitHub]%20Bachelor)
-* Loïc Santschi - [github@lugopi](https://github.com/loisama) - [loic.santschi@he-arc.ch](mailto:loic.santschi@he-arc.ch?subject=[GitHub]%20Bachelora)
+* Stéphane Oguey - [github@stephane-og](https://github.com/stephane-og) - [stephane.oguey@he-arc.ch](mailto:stephane.oguey@he-arc.ch?subject=[GitHub]%20Bachelor)
+* Loïc Santschi - [github@loisama](https://github.com/loisama) - [loic.santschi@he-arc.ch](mailto:loic.santschi@he-arc.ch?subject=[GitHub]%20Bachelora)
 * Miranda Fleury - [github@ClawdeenFleury](https://github.com/ClawdeenFleury) - [miranda.fleury@he-arc.ch](mailto:miranda.fleury@he-arc.ch?subject=[GitHub]%20Bachelora)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
