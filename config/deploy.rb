@@ -40,11 +40,32 @@ set :repo_url, "https://github.com/HE-Arc/Bachelora.git"
 
 # Créer un lien symbolique vers le fichier .env dans le répertoire current/backend
 after 'deploy:symlink:release', 'deploy:create_env_symlink'
+# Après le redémarrage de Gunicorn, exécutez les migrations de la base de données et collectez les fichiers statiques
+after 'gunicorn:restart', 'deploy:migrate_database'
+after 'gunicorn:restart', 'deploy:collect_static'
 namespace :deploy do
     desc 'Create symlink for .env file'
     task :create_env_symlink do
       on roles(:app) do
         execute "ln -sf #{shared_path}/.env #{release_path}/api/.env"
+      end
+    end
+
+    desc 'Migrate database'
+    task :migrate_database do
+      on roles(:app) do
+        within release_path.join('api') do
+          execute :python, 'manage.py migrate'
+        end
+      end
+    end
+  
+    desc 'Collect static files'
+    task :collect_static do
+      on roles(:app) do
+        within release_path.join('api') do
+          execute :python, 'manage.py collectstatic --noinput'
+        end
       end
     end
   end
@@ -62,6 +83,8 @@ end
 
 # Ajouter la tâche d'installation de Sass au déploiement Vue.js
 after 'deploy:updated', 'vue:install_sass'
+# Construire et déployer l'application Vue.js
+after 'vue:install_sass', 'vue:deploy'
 namespace :vue do
   desc 'Install Sass as a devDependency'
   task :install_sass do
@@ -71,11 +94,7 @@ namespace :vue do
       end
     end
   end
-end
 
-# Construire et déployer l'application Vue.js
-after 'vue:install_sass', 'vue:deploy'
-namespace :vue do
   desc 'Build and deploy Vue.js application'
   task :deploy do
     on roles(:app) do
@@ -97,7 +116,3 @@ namespace :gunicorn do
 	end
     end
 end
-
-
-
-
