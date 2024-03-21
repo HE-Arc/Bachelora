@@ -1,3 +1,8 @@
 from django.shortcuts import render
 
-# Create your views here.
+from rest_framework import viewsets
+
+class TbViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows Tb to be viewed or edited.
+    """
