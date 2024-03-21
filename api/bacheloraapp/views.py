@@ -32,3 +32,10 @@ class StudentViewSet(viewsets.ModelViewSet):
     """
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+
+class TeacherViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows TEACHER to be viewed or edited.
+    """
+    queryset = Teacher.objects.all()
+    serializer_class = TeacherSerializer
