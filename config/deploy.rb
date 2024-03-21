@@ -38,11 +38,6 @@ set :repo_url, "https://github.com/HE-Arc/Bachelora.git"
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
 
-# Créer un lien symbolique vers le fichier .env dans le répertoire current/backend
-after 'deploy:symlink:release', 'deploy:create_env_symlink'
-# Après le redémarrage de Gunicorn, exécutez les migrations de la base de données et collectez les fichiers statiques
-after 'gunicorn:restart', 'deploy:migrate_database'
-after 'gunicorn:restart', 'deploy:collect_static'
 namespace :deploy do
     desc 'Create symlink for .env file'
     task :create_env_symlink do
@@ -69,9 +64,7 @@ namespace :deploy do
       end
     end
   end
-  
-# Installer les dépendances Python
-after 'deploy:updating', 'pip:install'
+
 namespace :pip do
     desc 'Install'
     task :install do
@@ -81,10 +74,6 @@ namespace :pip do
     end
 end
 
-# Ajouter la tâche d'installation de Sass au déploiement Vue.js
-after 'deploy:updated', 'vue:install_sass'
-# Construire et déployer l'application Vue.js
-after 'vue:install_sass', 'vue:deploy'
 namespace :vue do
   desc 'Install Sass as a devDependency'
   task :install_sass do
@@ -106,8 +95,6 @@ namespace :vue do
   end
 end
 
-# Redémarrer le serveur Gunicorn
-after 'deploy:publishing', 'gunicorn:restart'
 namespace :gunicorn do
     desc 'Restart application'
     task :restart do
@@ -116,3 +103,22 @@ namespace :gunicorn do
 	end
     end
 end
+
+# Créer un lien symbolique vers le fichier .env dans le répertoire current/backend
+after 'deploy:symlink:release', 'deploy:create_env_symlink'
+
+# Installer les dépendances Python
+after 'deploy:updating', 'pip:install'
+
+# Ajouter la tâche d'installation de Sass au déploiement Vue.js
+after 'deploy:updated', 'vue:install_sass'
+
+# Construire et déployer l'application Vue.js
+after 'vue:install_sass', 'vue:deploy'
+
+# Redémarrer le serveur Gunicorn
+after 'deploy:publishing', 'gunicorn:restart'
+
+# Après le redémarrage de Gunicorn, exécutez les migrations de la base de données et collectez les fichiers statiques
+after 'gunicorn:restart', 'deploy:migrate_database'
+after 'gunicorn:restart', 'deploy:collect_static'
