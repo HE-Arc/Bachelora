@@ -91,6 +91,34 @@ class StudentViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
 
+    @action(detail=True, methods=['post'])
+    def add_bachelor(self, request, pk=None):
+        student : Student = self.get_object()
+        bachelor_id : Bachelor = request.data.get('bachelor_id')
+        if bachelor_id is not None:
+            try:
+                bachelor = Bachelor.objects.get(id=bachelor_id)
+                student.bachelors.add(bachelor)
+                return Response({'status': 'Bachelor added successfully'}, status=200)
+            except Bachelor.DoesNotExist:
+                return Response({'error': 'Bachelor does not exist'}, status=404)
+        else:
+            return Response({'error': 'Please provide bachelor_id'}, status=400)
+        
+    @action(detail=True, methods=['delete'])
+    def remove_bachelor(self, request, pk=None):
+        student : Student = self.get_object()
+        bachelor_id : Bachelor = request.data.get('bachelor_id')
+        if bachelor_id is not None:
+            try:
+                bachelor = Bachelor.objects.get(id=bachelor_id)
+                student.bachelors.remove(bachelor)
+                return Response({'status': 'Bachelor removed successfully'}, status=200)
+            except Bachelor.DoesNotExist:
+                return Response({'error': 'Bachelor does not exist'}, status=404)
+        else:
+            return Response({'error': 'Please provide bachelor_id'}, status=400)
+
 class TeacherViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows TEACHER to be viewed or edited.
