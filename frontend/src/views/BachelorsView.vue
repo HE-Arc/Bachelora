@@ -1,6 +1,6 @@
 <script setup>
 import axios from "axios";
-import { ref, onMounted } from "vue";
+import {ref, onMounted, computed} from "vue";
 
 import BachelorCard from "@/components/card/BachelorCard.vue";
 import Title from "@/components/Title.vue";
@@ -8,17 +8,6 @@ import Title from "@/components/Title.vue";
 import SecondaryButton from "@/components/SecondaryButton.vue";
 import MultiChipsSelect from "@/components/MultiChipsSelect.vue";
 
-const currentPage = ref(1);
-
-const tagsOptions = [
-    "IA",
-    "Laravel",
-    "Django",
-    "Traitement d'images",
-    "Java",
-    "C++",
-    "Dev web"
-];
 
 const tagsItems = ref([]);
 
@@ -29,11 +18,39 @@ const fetchTagsItems = async () => {
 };
 
 
+let originalBachelorsItems;
 const bachelorsItems = ref([]);
 
 const fetchBachelorsItems = async () => {
   const res = await axios.get("http://127.0.0.1:8000/api/bachelor/");
   bachelorsItems.value = res.data;
+  originalBachelorsItems = res.data;
+};
+
+let previousFilteredBachelorsItems = [];
+const updateBachelorsItems = (selectedTags) => {
+  // Display all bachelors
+  if (selectedTags.length === 0) {
+    bachelorsItems.value = originalBachelorsItems;
+    console.log(originalBachelorsItems);
+    return;
+  }
+
+  // Exactract id tags selected
+  const selectedTagIds = selectedTags.map(tag => tag.id);
+
+  // Filter with selected tags
+  const filteredBachelors = originalBachelorsItems.filter(bachelor => {
+    const hasAtLeastOneTag = bachelor.tags && selectedTagIds.some(tagId => bachelor.tags.includes(tagId));
+    const hasAllTags = bachelor.tags && selectedTagIds.every(tagId => bachelor.tags.includes(tagId));
+    return hasAtLeastOneTag && hasAllTags;
+  });
+
+  // Store filter list as previous list
+  previousFilteredBachelorsItems = [...filteredBachelors];
+
+  // Update with filter list
+  bachelorsItems.value = [...filteredBachelors];
 };
 
 onMounted(() => {
@@ -41,6 +58,25 @@ onMounted(() => {
   fetchTagsItems();
 });
 
+
+// Pagination
+const currentPage = ref(1);
+const maxBachelorsPerPage = 6;
+const totalPages = computed(() => Math.ceil(bachelorsItems.value.length / maxBachelorsPerPage));
+
+// Update list in function of current page
+const displayBachelors = computed(() => {
+  const startIndex = (currentPage.value - 1) * maxBachelorsPerPage;
+  const endIndex = startIndex + maxBachelorsPerPage;
+  return bachelorsItems.value.slice(startIndex, endIndex);
+});
+
+const updateCurrentPage = (page) => {
+  currentPage.value = page;
+};
+
+
+// Switch display grid / list
 const toggleBachelorsDisplayStyle = (e) => {
   const elementClicked = e.target;
 
@@ -62,7 +98,6 @@ const toggleBachelorsDisplayStyle = (e) => {
   }
 };
 
-
 </script>
 
 <template>
@@ -71,27 +106,32 @@ const toggleBachelorsDisplayStyle = (e) => {
 
     <SecondaryButton class="space center" dashed link="bachelors.create" text="Ajouter un travail de bachelor" icon="add"/>
 
-    <MultiChipsSelect class="space center" icon="filter_alt" label="Tags" :options="tagsOptions" />
+    <MultiChipsSelect class="space center" icon="filter_alt" label="Tags" :options="tagsItems" @selection-changed="updateBachelorsItems" />
 
     <ul class="space bachelors-display-style center">
       <li><q-icon class="bachelors-style grid" size="md" @click="toggleBachelorsDisplayStyle" name="grid_view" /></li>
       <li><q-icon class="bachelors-style active list" size="md" @click="toggleBachelorsDisplayStyle" name="list" /></li>
     </ul>
-    
+
     <ul id="bachelors" class="bachelors">
-      <li class="item-bachelor" v-for="bachelor in bachelorsItems" :key="bachelor">
-        <BachelorCard :bachelor="bachelor"/>
-      </li>
+      <template v-if="displayBachelors.length === 0">
+        <p>Aucun résultat trouvé.</p>
+      </template>
+      <template v-else>
+        <li class="item-bachelor" v-for="bachelor in displayBachelors" :key="bachelor">
+          <BachelorCard :bachelor="bachelor"/>
+        </li>
+      </template>
     </ul>
 
     <div class="q-pa-lg flex flex-center">
       <q-pagination color="secondary"
         v-model="currentPage"
-        :max="5"
+        :max="totalPages"
         direction-links
+        @input="updateCurrentPage"
       />
     </div>
-
   </section>
 </template>
 
