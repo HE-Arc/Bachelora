@@ -6,9 +6,9 @@ class OrientationSerializer(serializers.HyperlinkedModelSerializer):
         model = Orientation
         fields = [
             "url",
-            "id",
+            "id", 
             "name",
-        ]
+            ]
 
 class TagSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -25,28 +25,43 @@ class CustomUserSerializer(serializers.HyperlinkedModelSerializer):
         fields = [
             "url",
             "id",
-            "username", 
+            "username",
+            "password",
             "email", 
             "first_name", 
-            "last_name", 
+            "last_name",
             "user_type",
         ]
 
 class TeacherSerializer(CustomUserSerializer):
+    user_type = serializers.CharField(read_only=True)
+    
     class Meta(CustomUserSerializer.Meta):
         model = Teacher
         fields = CustomUserSerializer.Meta.fields
 
 class BachelorSerializer(serializers.HyperlinkedModelSerializer):
+    teacher = serializers.PrimaryKeyRelatedField(queryset=Teacher.objects.all())
+    tags = serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all(), many=True, required=False)
+    orientations = serializers.PrimaryKeyRelatedField(queryset=Orientation.objects.all(), many=True, required=True)
+
     class Meta:
         model = Bachelor
         fields = [
             "url",
-            "id",
-            "username",
-        ]
+            "id", 
+            "name", 
+            "description", 
+            "teacher", 
+            "tags", 
+            "orientations",
+            ]
 
 class StudentSerializer(CustomUserSerializer):
+    orientation = serializers.PrimaryKeyRelatedField(queryset=Orientation.objects.all())
+    bachelors = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    user_type = serializers.CharField(read_only=True)
+    
     class Meta(CustomUserSerializer.Meta):
         model = Student
         fields = CustomUserSerializer.Meta.fields + [
