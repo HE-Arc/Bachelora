@@ -7,13 +7,18 @@
     link: {
       type: String,
       required: false
+    },
+    type: {
+      type:String,
+      required: false,
+      default: "button"
     }
   })
 </script>
 
 <template>
-  <q-btn v-if="link" color="primary" class="btn btn-primary" :to="{ name : props.link }" size="md" :label="props.text" />
-  <q-btn v-else color="primary" class="btn btn-primary" size="md" :label="props.text" />
+  <q-btn v-if="link" color="primary" class="btn btn-primary" :to="{ name : props.link }" size="md" :label="props.text" :type="props.type" />
+  <q-btn v-else color="primary" class="btn btn-primary" size="md" :label="props.text" :type="props.type"/>
 </template>
 
 <style scoped lang="scss">
