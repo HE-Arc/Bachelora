@@ -25,3 +25,10 @@ class TagViewSet(viewsets.ModelViewSet):
     """
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
+
+class StudentViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows STUDENT to be viewed or edited.
+    """
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
