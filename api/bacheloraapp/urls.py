@@ -8,6 +8,7 @@ router.register(r'orientation', views.OrientationViewSet)
 router.register(r'tag', views.TagViewSet)
 
 router.register(r'student', views.StudentViewSet)
+router.register(r'teacher', views.TeacherViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
