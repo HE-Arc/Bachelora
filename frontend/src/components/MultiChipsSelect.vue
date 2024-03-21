@@ -1,6 +1,8 @@
 <script setup>
 
-  import {ref, defineProps } from "vue";
+import {ref, defineProps, watch} from "vue";
+
+const emit = defineEmits(['selection-changed', 'submit']);
 
   const props = defineProps({
     label: {
@@ -8,16 +10,21 @@
       required: true
     },
     options: {
-      type: Array,
+      type: Object,
       required: true
     },
     icon: {
       type: String,
       required: false
     },
-  })
+  });
+
 
   const model = ref([]);
+
+  watch(model, (newValue) => {
+      emit('selection-changed', newValue);
+    });
 
 </script>
 
@@ -28,6 +35,8 @@
         v-model="model"
         multiple
         :options="props.options"
+        option-value="id"
+        option-label="name"
         use-chips
         stack-label
         :label="props.label">
