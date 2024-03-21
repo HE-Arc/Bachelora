@@ -18,3 +18,10 @@ class OrientationViewSet(viewsets.ModelViewSet):
     """
     queryset = Orientation.objects.all()
     serializer_class = OrientationSerializer
+
+class TagViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows TAG to be viewed or edited.
+    """
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
