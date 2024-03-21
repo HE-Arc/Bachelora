@@ -125,7 +125,7 @@ after 'vue:install_sass', 'vue:deploy'
 
 # Redémarrer le serveur Gunicorn
 after 'deploy:publishing', 'gunicorn:stop'
-after 'gunicon:stop', 'gunicorn:restart'
+after 'gunicorn:stop', 'gunicorn:restart'
 
 # Après le redémarrage de Gunicorn, exécutez les migrations de la base de données et collectez les fichiers statiques
 after 'gunicorn:restart', 'deploy:migrate_database'
