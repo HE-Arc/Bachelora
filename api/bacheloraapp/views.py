@@ -11,3 +11,10 @@ class BachelorViewSet(viewsets.ModelViewSet):
     """
     queryset = Bachelor.objects.all()
     serializer_class = BachelorSerializer
+
+class OrientationViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows ORIENTATION to be viewed or edited.
+    """
+    queryset = Orientation.objects.all()
+    serializer_class = OrientationSerializer
