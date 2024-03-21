@@ -13,6 +13,7 @@ class BachelorViewSet(viewsets.ModelViewSet):
     """
     queryset = Bachelor.objects.all()
     serializer_class = BachelorSerializer
+    allowed_methods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
 
     @action(detail=True, methods=['post'])
     def add_tag(self, request, pk=None):
@@ -76,6 +77,7 @@ class OrientationViewSet(viewsets.ModelViewSet):
     """
     queryset = Orientation.objects.all()
     serializer_class = OrientationSerializer
+    allowed_methods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
 
 class TagViewSet(viewsets.ModelViewSet):
     """
@@ -83,6 +85,7 @@ class TagViewSet(viewsets.ModelViewSet):
     """
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
+    allowed_methods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
 
 class StudentViewSet(viewsets.ModelViewSet):
     """
@@ -90,6 +93,7 @@ class StudentViewSet(viewsets.ModelViewSet):
     """
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+    allowed_methods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
 
     @action(detail=True, methods=['post'])
     def add_bachelor(self, request, pk=None):
@@ -125,3 +129,4 @@ class TeacherViewSet(viewsets.ModelViewSet):
     """
     queryset = Teacher.objects.all()
     serializer_class = TeacherSerializer
+    allowed_methods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
