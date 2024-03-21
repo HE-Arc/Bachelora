@@ -1,6 +1,8 @@
 from django.shortcuts import render
 
 from rest_framework import viewsets
+from rest_framework.response import Response
+from rest_framework.decorators import action
 
 from .views import *
 from .serializers import *
@@ -11,6 +13,34 @@ class BachelorViewSet(viewsets.ModelViewSet):
     """
     queryset = Bachelor.objects.all()
     serializer_class = BachelorSerializer
+
+    @action(detail=True, methods=['post'])
+    def add_tag(self, request, pk=None):
+        bachelor : Bachelor = self.get_object()
+        tag_id : Tag = request.data.get('tag_id')
+        if tag_id is not None:
+            try:
+                tag = Tag.objects.get(id=tag_id)
+                bachelor.tags.add(tag)
+                return Response({'status': 'Tag added successfully'}, status=200)
+            except Tag.DoesNotExist:
+                return Response({'error': 'Tag does not exist'}, status=404)
+        else:
+            return Response({'error': 'Please provide tag_id'}, status=400)
+        
+    @action(detail=True, methods=['delete'])
+    def remove_tag(self, request, pk=None):
+        bachelor : Bachelor = self.get_object()
+        tag_id : Tag = request.data.get('tag_id')
+        if tag_id is not None:
+            try:
+                tag = Tag.objects.get(id=tag_id)
+                bachelor.tags.remove(tag)
+                return Response({'status': 'Tag removed successfully'}, status=200)
+            except Tag.DoesNotExist:
+                return Response({'error': 'Tag does not exist'}, status=404)
+        else:
+            return Response({'error': 'Please provide tag_id'}, status=400)
 
 class OrientationViewSet(viewsets.ModelViewSet):
     """
