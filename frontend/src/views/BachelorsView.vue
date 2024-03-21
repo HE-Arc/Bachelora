@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
 import Title from "@/components/Title.vue";
 import Card from "@/components/card/BachelorCard.vue";
