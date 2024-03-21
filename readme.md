@@ -54,8 +54,6 @@
         <li><a href="#launch-the-project">Launch the project</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -134,31 +132,6 @@ From the subfolder `~\Bachelora\frontend\`, in a terminal, enter the following c
    npm run dev
    ```
 The frontend application is available at http://localhost:5173.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- USAGE EXAMPLES -->
-## Usage
-
-To test the functionality of the application, you can log in as a test user from the login form with the following credentials:
-
-**Username**
-```bash
-test@example.com
-```
-
-**Password**
-```bash
-password
-```
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- ROADMAP -->
-## Roadmap
-See the [RoadMap](https://github.com/HE-Arc/calm/wiki/Roadmap)
-
-See the [open issues](https://github.com/HE-Arc/calm/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
