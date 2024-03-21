@@ -2,7 +2,12 @@ from django.shortcuts import render
 
 from rest_framework import viewsets
 
-class TbViewSet(viewsets.ModelViewSet):
+from .views import *
+from .serializers import *
+
+class BachelorViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows Tb to be viewed or edited.
+    API endpoint that allows BACHELOR to be viewed or edited.
     """
+    queryset = Bachelor.objects.all()
+    serializer_class = BachelorSerializer
