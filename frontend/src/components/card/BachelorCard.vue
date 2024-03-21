@@ -1,22 +1,58 @@
 <script setup>
 
+  import {ref, defineProps, onMounted } from "vue";
+  import axios from "axios";
+
+  const props = defineProps({
+    bachelor: {
+      type: Object,
+      required: true
+    },
+  });
+
+  const tagsItems = ref([]);
+  const fetchTagsItems = async () => {
+    for (const id of props.bachelor.tags) {
+      try {
+        const res = await axios.get(`http://127.0.0.1:8000/api/tag/${id}/`);
+        tagsItems.value.push(res.data);
+      } catch (error) {
+        console.error(`Erreur lors de la récupération des tags : `, error);
+      }
+    }
+  };
+
+  const teacherName = ref('');
+  const fetchTeacher = async () => {
+    try {
+      const res = await axios.get(`http://127.0.0.1:8000/api/teacher/${props.bachelor.teacher}/`);
+      teacherName.value = res.data.first_name + " " + res.data.last_name;
+    } catch (error) {
+      console.error(`Erreur lors de la récupération des tags : `, error);
+    }
+  };
+
+  onMounted(() => {
+    fetchTagsItems();
+    fetchTeacher();
+  });
 </script>
 
 <template>
     <q-card flat bordered>
       <q-card-section horizontal>
         <q-card-section class="q-pt-xs">
-          <div class="text-overline">Proposée par entreprise</div>
-          <div class="text-h5 q-mt-sm q-mb-xs">Titre</div>
+          <div v-show="false" class="text-overline">Proposée par entreprise</div>
+          <div class="text-h5 q-mt-sm q-mb-xs">{{props.bachelor.name}}</div>
           <div class="text-caption text-grey">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            {{props.bachelor.description}}
           </div>
 
-          <div class="text-overline">Enseignat ayant entré le travail</div>
+          <div class="text-overline">Proposé par : {{teacherName}}</div>
 
           <div>
-            <q-chip v-for="item in 5" :key="item">
-              IA
+            <q-chip v-for="tag in tagsItems" :key="tag">
+              {{tag.name}}
             </q-chip>
           </div>
         </q-card-section>

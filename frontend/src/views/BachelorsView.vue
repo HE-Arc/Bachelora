@@ -1,8 +1,10 @@
 <script setup>
-import { ref } from 'vue';
+import axios from "axios";
+import { ref, onMounted } from "vue";
 
+import BachelorCard from "@/components/card/BachelorCard.vue";
 import Title from "@/components/Title.vue";
-import Card from "@/components/card/BachelorCard.vue";
+
 import SecondaryButton from "@/components/SecondaryButton.vue";
 import MultiChipsSelect from "@/components/MultiChipsSelect.vue";
 
@@ -17,6 +19,27 @@ const tagsOptions = [
     "C++",
     "Dev web"
 ];
+
+const tagsItems = ref([]);
+
+const fetchTagsItems = async () => {
+  const res = await axios.get("http://127.0.0.1:8000/api/tag/");
+
+  tagsItems.value = res.data;
+};
+
+
+const bachelorsItems = ref([]);
+
+const fetchBachelorsItems = async () => {
+  const res = await axios.get("http://127.0.0.1:8000/api/bachelor/");
+  bachelorsItems.value = res.data;
+};
+
+onMounted(() => {
+  fetchBachelorsItems();
+  fetchTagsItems();
+});
 
 const toggleBachelorsDisplayStyle = (e) => {
   const elementClicked = e.target;
@@ -56,7 +79,9 @@ const toggleBachelorsDisplayStyle = (e) => {
     </ul>
     
     <ul id="bachelors" class="bachelors">
-      <li class="item-bachelor" v-for="card in 10" :key="card"><Card /></li>
+      <li class="item-bachelor" v-for="bachelor in bachelorsItems" :key="bachelor">
+        <BachelorCard :bachelor="bachelor"/>
+      </li>
     </ul>
 
     <div class="q-pa-lg flex flex-center">
