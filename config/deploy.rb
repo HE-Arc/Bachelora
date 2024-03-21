@@ -96,12 +96,19 @@ namespace :vue do
 end
 
 namespace :gunicorn do
-    desc 'Restart application'
-    task :restart do
-        on roles(:web) do |h|
-	    execute :sudo, 'systemctl restart gunicorn'
-	end
+  desc 'Stop application'
+  task :stop do
+    on roles(:app) do
+      execute :sudo, 'systemctl stop gunicorn'
     end
+  end
+
+  desc 'Restart application'
+  task :restart do
+    on roles(:app) do
+      execute :sudo, 'systemctl restart gunicorn'
+    end
+  end
 end
 
 # Créer un lien symbolique vers le fichier .env dans le répertoire current/backend
@@ -117,7 +124,8 @@ after 'deploy:updated', 'vue:install_sass'
 after 'vue:install_sass', 'vue:deploy'
 
 # Redémarrer le serveur Gunicorn
-after 'deploy:publishing', 'gunicorn:restart'
+after 'deploy:publishing', 'gunicorn:stop'
+after 'gunicon:stop', 'gunicorn:restart'
 
 # Après le redémarrage de Gunicorn, exécutez les migrations de la base de données et collectez les fichiers statiques
 after 'gunicorn:restart', 'deploy:migrate_database'
