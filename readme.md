@@ -14,7 +14,6 @@
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
 
 <!-- PROJECT LOGO -->
 <br />
@@ -57,8 +56,8 @@
         <li><a href="#launch-the-project">Launch the project</a></li>
       </ul>
     </li>
+    <li><a href="#rendu-intermédiaire">Rendu intermédiaire</a></li>
     <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
@@ -138,6 +137,19 @@ The frontend application is available at http://localhost:5173.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## Rendu intermédiaire
+
+### Page d'affichage de BDD
+L'affichage d'une liste de données provenant de la base de données, dans notre application, correspond à la liste des travaux de diplômes : [Liste des TB](https://bachelora.k8s.ing.he-arc.ch/bachelors).
+Normalement, la liste des travaux de bachelors s'affiche, les TB sont affichés par ordre décroissant par ordre d'ajout. L'utilisateur peut filtrer l'affichage des TB en fonction des tags.
+
+### Page d'enregistrement BDD
+Pour l'enregistrement de nouvelles entrées dans la base de données, dans notre application, correspond l'ajout d'un nouveau travail de diplôme.
+Pour ce faire, il faut cliquer sur se rendre sous "Ajouter un travail de bachelor" (toujours depuis la page de la liste des TB). Ensuite, il faut compléter le formulaire.
+Après avoir saisies les données, l'utilisateur est redirigé vers la page de la liste des TB.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 <!-- CONTRIBUTING -->
 ## Contributing
 
@@ -154,12 +166,6 @@ Don't forget to give the project a star! Thanks again!
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- LICENSE -->
-## License
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTACT -->
 ## Contact
@@ -188,8 +194,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 [stars-url]: https://github.com/HE-Arc/Bachelora/stargazers
 [issues-shield]: https://img.shields.io/github/issues/HE-Arc/Bachelora.svg?style=for-the-badge
 [issues-url]: https://github.com/HE-Arc/Bachelora/issues
-[license-shield]: https://img.shields.io/badge/license-MIT-green?style=for-the-badge
-[license-url]: https://github.com/HE-Arc/Bachelora/blob/main/LICENSE
 [Django.com]: https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=green
 [Django-url]: https://www.djangoproject.com
 [Figma.com]: https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white
