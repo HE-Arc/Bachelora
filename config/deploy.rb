@@ -106,7 +106,7 @@ namespace :gunicorn do
   desc 'Restart application'
   task :restart do
     on roles(:app) do
-      execute "#{deploy_to}/restart-gunicorn.sh"
+      execute "#{deploy_to}restart-gunicorn.sh"
     end
   end
 end
