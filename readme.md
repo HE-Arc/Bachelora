@@ -116,7 +116,7 @@ From the subfolder `~\Bachelora\api\`, in a terminal, enter the following comman
 
 > Start backend server
    ```sh
-   pipenv manage.py runserver
+   python manage.py runserver
    ```
 
 The backend application is available at http://localhost:8000.
