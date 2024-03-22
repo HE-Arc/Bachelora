@@ -118,18 +118,18 @@ namespace :gunicorn do
   end
 end
 
-# Créer un lien symbolique vers le fichier .env dans le répertoire current/backend et current/frontend
-after 'deploy:symlink:release', 'deploy:create_env_symlink'
-after 'deploy:symlink:release', 'deploy:create_env_symlink_frontend'
-
 # Installer les dépendances Python
 after 'deploy:updating', 'pip:install'
 
 # Ajouter la tâche d'installation de Sass au déploiement Vue.js
 after 'deploy:updated', 'vue:install_sass'
 
+# Créer un lien symbolique vers le fichier .env dans le répertoire current/backend et current/frontend
+after 'vue:install_sass', 'deploy:create_env_symlink'
+after 'deploy:create_env_symlink', 'deploy:create_env_symlink_frontend'
+
 # Construire et déployer l'application Vue.js
-after 'vue:install_sass', 'vue:deploy'
+after 'deploy:create_env_symlink_frontend', 'vue:deploy'
 
 # Redémarrer le serveur Gunicorn
 after 'deploy:publishing', 'gunicorn:stop'
