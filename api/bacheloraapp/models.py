@@ -7,7 +7,7 @@ class Orientation(models.Model):
     name = models.CharField(max_length=10)
     
 class Tag(models.Model):
-    name = models.CharField(max_length=12)
+    name = models.CharField(max_length=25)
 
 class CustomUser(AbstractUser):
     USER_TYPE_CHOICES = [
