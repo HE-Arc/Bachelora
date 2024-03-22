@@ -5,6 +5,7 @@ import PrimaryButton from "@/components/PrimaryButton.vue";
 import MultiChipsSelect from "@/components/MultiChipsSelect.vue";
 import SecondaryButton from "@/components/SecondaryButton.vue";
 import axios from "axios";
+import router from "@/router/index.js";
 
 const title = ref(null);
 const description = ref(null);
@@ -69,12 +70,13 @@ const onSubmit = async() => {
       });
       success.value = true;
 
-      // Réinitialisation des champs après l'envoi réussi
-    title.value = null;
-    description.value = null;
-    teacher.value = null;
-    orientation.value = null;
-    tags.value = [];
+      // Reset after success send
+      title.value = null;
+      description.value = null;
+      teacher.value = null;
+      orientation.value = null;
+      tags.value = [];
+      await router.push({name: 'bachelors'});
 
     } catch (e) {
       console.log(e);
