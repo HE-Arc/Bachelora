@@ -10,8 +10,10 @@ import MultiChipsSelect from "@/components/MultiChipsSelect.vue";
 
 const tagsItems = ref([]);
 
+const API_LINK = import.meta.env.VITE_API_LINK;
+
 const fetchTagsItems = async () => {
-  const res = await axios.get("http://127.0.0.1:8000/api/tag/");
+  const res = await axios.get(API_LINK + "api/tag/");
 
   tagsItems.value = res.data;
 };
@@ -21,7 +23,7 @@ let originalBachelorsItems;
 const bachelorsItems = ref([]);
 
 const fetchBachelorsItems = async () => {
-  const res = await axios.get("http://127.0.0.1:8000/api/bachelor/");
+  const res = await axios.get(API_LINK + "api/bachelor/");
   const sortedData = res.data.sort((a, b) => b.id - a.id);
   bachelorsItems.value = sortedData;
   originalBachelorsItems = sortedData;

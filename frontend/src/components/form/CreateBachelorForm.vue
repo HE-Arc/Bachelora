@@ -7,6 +7,8 @@ import SecondaryButton from "@/components/SecondaryButton.vue";
 import axios from "axios";
 import router from "@/router/index.js";
 
+const API_LINK = import.meta.env.VITE_API_LINK;
+
 const title = ref(null);
 const description = ref(null);
 const teacher = ref(null)
@@ -16,21 +18,21 @@ const tags = ref([]);
 const tagsItems = ref([]);
 
 const fetchTagsItems = async () => {
-  const res = await axios.get("http://127.0.0.1:8000/api/tag/");
+  const res = await axios.get(API_LINK + "api/tag/");
 
   tagsItems.value = res.data;
 };
 
 const orientationItems = ref([]);
 const fetchOrientationItems = async () => {
-  const res = await axios.get("http://127.0.0.1:8000/api/orientation/");
+  const res = await axios.get(API_LINK + "api/orientation/");
   orientationItems.value = res.data;
 };
 
 const teachersItems = ref([]);
 const fetchTeachersItems = async () => {
   try {
-    const res = await axios.get("http://127.0.0.1:8000/api/teacher/");
+    const res = await axios.get(API_LINK + "api/teacher/");
     teachersItems.value = res.data.map(teacher => {
       teacher.fullname = `${teacher.first_name} ${teacher.last_name}`;
       return {
@@ -60,7 +62,7 @@ const success = ref(false);
 const onSubmit = async() => {
     try {
       success.value = false;
-      await axios.post("http://127.0.0.1:8000/api/bachelor/",
+      await axios.post(API_LINK + "api/bachelor/",
       {
         name: title.value,
         description: description.value,
@@ -76,7 +78,8 @@ const onSubmit = async() => {
       teacher.value = null;
       orientation.value = null;
       tags.value = [];
-      await router.push({name: 'bachelors'});
+
+      await router.push("/bachelors");
 
     } catch (e) {
       console.log(e);
