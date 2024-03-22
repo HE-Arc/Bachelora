@@ -8,7 +8,6 @@ import Title from "@/components/Title.vue";
 import SecondaryButton from "@/components/SecondaryButton.vue";
 import MultiChipsSelect from "@/components/MultiChipsSelect.vue";
 
-
 const tagsItems = ref([]);
 
 const fetchTagsItems = async () => {
@@ -23,8 +22,9 @@ const bachelorsItems = ref([]);
 
 const fetchBachelorsItems = async () => {
   const res = await axios.get("http://127.0.0.1:8000/api/bachelor/");
-  bachelorsItems.value = res.data;
-  originalBachelorsItems = res.data;
+  const sortedData = res.data.sort((a, b) => b.id - a.id);
+  bachelorsItems.value = sortedData;
+  originalBachelorsItems = sortedData;
 };
 
 let previousFilteredBachelorsItems = [];
