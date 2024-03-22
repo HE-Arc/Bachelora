@@ -46,6 +46,13 @@ namespace :deploy do
       end
     end
 
+    desc 'Create symlink for .env filefor frontend'
+    task :create_env_symlink_frontend do
+      on roles(:app) do
+        execute "ln -sf #{shared_path}/.env_front #{release_path}/frontend/.env"
+      end
+    end
+
     desc 'Migrate database'
     task :migrate_database do
       on roles(:app) do
@@ -111,8 +118,9 @@ namespace :gunicorn do
   end
 end
 
-# Créer un lien symbolique vers le fichier .env dans le répertoire current/backend
+# Créer un lien symbolique vers le fichier .env dans le répertoire current/backend et current/frontend
 after 'deploy:symlink:release', 'deploy:create_env_symlink'
+after 'deploy:symlink:release', 'deploy:create_env_symlink_frontend'
 
 # Installer les dépendances Python
 after 'deploy:updating', 'pip:install'
