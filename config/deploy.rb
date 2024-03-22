@@ -103,17 +103,10 @@ namespace :vue do
 end
 
 namespace :gunicorn do
-  desc 'Stop application'
-  task :stop do
-    on roles(:app) do
-      execute :sudo, 'systemctl stop gunicorn'
-    end
-  end
-
   desc 'Restart application'
   task :restart do
     on roles(:app) do
-      execute :sudo, 'systemctl restart gunicorn'
+      execute "#{deploy_to}/restart-gunicorn.sh"
     end
   end
 end
@@ -132,8 +125,7 @@ after 'deploy:create_env_symlink', 'deploy:create_env_symlink_frontend'
 after 'deploy:create_env_symlink_frontend', 'vue:deploy'
 
 # Redémarrer le serveur Gunicorn
-after 'deploy:publishing', 'gunicorn:stop'
-after 'gunicorn:stop', 'gunicorn:restart'
+after 'deploy:publishing', 'gunicorn:restart'
 
 # Après le redémarrage de Gunicorn, exécutez les migrations de la base de données et collectez les fichiers statiques
 after 'gunicorn:restart', 'deploy:migrate_database'
