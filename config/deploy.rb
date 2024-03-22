@@ -96,7 +96,7 @@ namespace :vue do
     on roles(:app) do
       within release_path.join('frontend') do
         execute :npm, 'install' # Installer les dépendances npm
-        execute :npm, 'run build' # Construire l'application Vue.js
+        execute :vite, 'build' # Construire l'application Vue.js
       end
     end
   end
