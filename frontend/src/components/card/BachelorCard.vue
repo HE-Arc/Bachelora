@@ -3,6 +3,8 @@
   import {ref, defineProps, onMounted } from "vue";
   import axios from "axios";
 
+  const API_LINK = import.meta.env.VITE_API_LINK;
+
   const props = defineProps({
     bachelor: {
       type: Object,
@@ -14,7 +16,7 @@
   const fetchTagsItems = async () => {
     for (const id of props.bachelor.tags) {
       try {
-        const res = await axios.get(`http://127.0.0.1:8000/api/tag/${id}/`);
+        const res = await axios.get(`${API_LINK}api/tag/${id}/`);
         tagsItems.value.push(res.data);
       } catch (error) {
         console.error(`Erreur lors de la récupération des tags : `, error);
@@ -25,7 +27,7 @@
   const teacherName = ref('');
   const fetchTeacher = async () => {
     try {
-      const res = await axios.get(`http://127.0.0.1:8000/api/teacher/${props.bachelor.teacher}/`);
+      const res = await axios.get(`${API_LINK}api/teacher/${props.bachelor.teacher}/`);
       teacherName.value = res.data.first_name + " " + res.data.last_name;
     } catch (error) {
       console.error(`Erreur lors de la récupération des tags : `, error);
