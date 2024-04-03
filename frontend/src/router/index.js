@@ -4,6 +4,7 @@ import LoginView from "@/views/LoginView.vue";
 import RegisterView from "@/views/RegisterView.vue";
 import BachelorsView from "@/views/BachelorsView.vue";
 import CreateBachelorView from "@/views/CreateBachelorView.vue";
+import BachelorView from "@/views/BachelorView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,6 +38,11 @@ const router = createRouter({
       path: '/bachelors',
       name: 'bachelors',
       component: BachelorsView
+    },
+    {
+      path: '/bachelors/:id',
+      name: 'bachelors.detail',
+      component: BachelorView
     },
     {
       path: '/bachelors/create',

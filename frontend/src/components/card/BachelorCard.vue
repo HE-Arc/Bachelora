@@ -2,6 +2,7 @@
 
   import {ref, defineProps, onMounted } from "vue";
   import axios from "axios";
+  import router from "@/router/index.js";
 
   const API_LINK = import.meta.env.VITE_API_LINK;
 
@@ -38,11 +39,18 @@
     fetchTagsItems();
     fetchTeacher();
   });
+
+  const showDetail = async () => {
+    await router.push({
+          name: 'bachelors.detail',
+          params: {id: props.bachelor.id,}
+    });
+  }
 </script>
 
 <template>
     <q-card flat bordered>
-      <q-card-section horizontal>
+      <q-card-section horizontal @click="showDetail" class="cursor-pointer">
         <q-card-section class="q-pt-xs">
           <div v-show="false" class="text-overline">Proposée par entreprise</div>
           <div class="text-h5 q-mt-sm q-mb-xs">{{props.bachelor.name}}</div>
