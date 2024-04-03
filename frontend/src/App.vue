@@ -1,9 +1,31 @@
 <script setup>
 import NavBar from "@/components/NavBar.vue";
+import {onBeforeUnmount, onMounted, ref} from "vue";
+
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+};
+
+const showScrollButton = ref(false);
+
+const handleScroll = () => {
+  showScrollButton.value = window.scrollY > 100;
+}
+
+onMounted(() => {
+  window.addEventListener("scroll", handleScroll);
+});
+onBeforeUnmount(() => {
+  window.removeEventListener("scroll", handleScroll);
+});
+
 </script>
 
 <template>
-  <q-layout view="lHh LpR lFf" style="min-height: 95vh">
+  <q-layout view="lHh LpR lFf" style="min-height: 90vh">
     <NavBar />
     <q-page-container>
       <main>
@@ -13,6 +35,10 @@ import NavBar from "@/components/NavBar.vue";
           </transition>
         </router-view>
       </main>
+
+      <q-page-sticky position="bottom-right" :offset="[18, 18]" v-show="showScrollButton">
+        <q-btn fab icon="expand_less" color="primary" @click="scrollToTop" />
+      </q-page-sticky>
     </q-page-container>
   </q-layout>
 </template>
