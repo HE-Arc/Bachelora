@@ -137,7 +137,6 @@ const onSubmit = async() => {
       });
       success.value = true;
       showNotif();
-
     } catch (e) {
       console.log(e);
     }
@@ -148,21 +147,12 @@ const showNotif = () => {
   $q.notify({
     type: 'positive',
     message: 'Modification effectuée avec succès !',
-    //html: true,
-    //progress: true,
-    //position: 'top',
-    //actions: [{ icon: 'close', color: 'white' }]
   })
 }
 
 </script>
 
 <template>
-
-   <div class="q-pa-md">
-    <q-btn no-caps color="purple" @click="showNotif" label="Show HTML Notification" />
-  </div>
-
   <q-form
       @submit="onSubmit"
       class="q-gutter-md"
