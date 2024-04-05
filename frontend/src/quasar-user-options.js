@@ -22,6 +22,7 @@ export default {
       notify: Notify.setDefaults({
         position: 'top',
         timeout: 2500,
+        html: true,
         textColor: 'white',
         progress: true,
         actions: [{ icon: 'close', color: 'white' }]

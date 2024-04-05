@@ -46,6 +46,10 @@
           params: {id: props.bachelor.id,}
     });
   }
+
+  const emit = defineEmits(['getItemDeleteId']);
+  const getItemDeleteId = () => emit('getItemDeleteId', props.bachelor.id);
+
 </script>
 
 <template>
@@ -72,7 +76,7 @@
 
       <q-card-actions align="around">
         <q-btn class="btn-edit" flat icon="edit" color="primary" :href="`/bachelors/${bachelor.id}/edit/`" />
-        <q-btn class="btn-delete" flat icon="delete" color="red" />
+        <q-btn class="btn-delete" flat icon="delete" color="red" @click="getItemDeleteId" />
       </q-card-actions>
     </q-card>
 </template>
