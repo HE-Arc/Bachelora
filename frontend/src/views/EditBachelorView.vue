@@ -1,6 +1,7 @@
 <script setup>
 
 import Title from "@/components/Title.vue";
+import EditBachelorForm from "@/components/form/EditBachelorForm.vue";
 
 import { useRoute } from 'vue-router';
 import {computed, onMounted, ref} from 'vue';
@@ -29,8 +30,7 @@ const fetchBachelor = async () => {
     }
 
     const res = await axios.get(`${API_LINK}api/teacher/${bachelor.value.teacher}/`);
-    bachelor.value.teacher = res.data.first_name + " " + res.data.last_name;
-
+    bachelor.value.teacher = res.data.id;
   } catch (error) {
     console.error(`Erreur lors de la récupération des tags : `, error);
   }
@@ -44,22 +44,15 @@ onMounted(() => {
 
 <template>
   <section>
+
     <BackButton link="bachelors" />
 
-    <Title :text="bachelor.name"/>
+    <Title text="Modification d'un travail de bachelor" />
 
-    <p class="q-my-auto text-justify">{{ bachelor.description }}</p>
-
-    <br>
-
-    <p>Enseignant ayant entré le travail : <em>{{ bachelor.teacher }}</em></p>
-    <div class="text-center">
-      <q-chip v-for="tag in bachelor.tagsItems" :key="tag">
-        {{ tag.name }}
-      </q-chip>
-    </div>
+    <EditBachelorForm :bachelor="bachelor" />
   </section>
 </template>
 
 <style scoped lang="scss">
+
 </style>

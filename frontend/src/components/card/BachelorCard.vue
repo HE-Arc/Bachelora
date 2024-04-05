@@ -71,7 +71,7 @@
       <q-separator />
 
       <q-card-actions align="around">
-        <q-btn class="btn-edit" flat icon="edit" color="primary" />
+        <q-btn class="btn-edit" flat icon="edit" color="primary" :href="`/bachelors/${bachelor.id}/edit/`" />
         <q-btn class="btn-delete" flat icon="delete" color="red" />
       </q-card-actions>
     </q-card>
