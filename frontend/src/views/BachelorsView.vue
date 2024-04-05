@@ -7,6 +7,7 @@ import Title from "@/components/Title.vue";
 
 import SecondaryButton from "@/components/SecondaryButton.vue";
 import MultiChipsSelect from "@/components/MultiChipsSelect.vue";
+import DeleteBachelorForm from "@/components/form/DeleteBachelorForm.vue";
 
 const tagsItems = ref([]);
 
@@ -99,6 +100,22 @@ const toggleBachelorsDisplayStyle = (e) => {
   }
 };
 
+const bachelorToDeleteID =  ref(null);
+const getItemDeleteId = (data) => {
+  bachelorToDeleteID.value = data;
+  openDialog();
+}
+
+const stateDialog = ref(false);
+const openDialog = () => {
+  stateDialog.value = true;
+};
+
+const closeDialog = () => {
+  stateDialog.value = false;
+  fetchBachelorsItems();
+}
+
 </script>
 
 <template>
@@ -108,6 +125,16 @@ const toggleBachelorsDisplayStyle = (e) => {
     <SecondaryButton class="space center" dashed link="bachelors.create" text="Ajouter un travail de bachelor" icon="add"/>
 
     <MultiChipsSelect class="space center" icon="filter_alt" label="Tags" :options="tagsItems" @selection-changed="updateBachelorsItems" />
+
+    <DeleteBachelorForm
+      title="Suppression d'un travail de bachelor"
+      icon="dangerous"
+      btn-text-submit="Oui, supprimer"
+      btn-text-cancel="Non, annuler"
+      :state="stateDialog"
+      @close-custom="closeDialog"
+      :item-delete-id="bachelorToDeleteID"
+    />
 
     <ul class="space bachelors-display-style center">
       <li><q-icon class="bachelors-style grid" size="md" @click="toggleBachelorsDisplayStyle" name="grid_view" /></li>
@@ -120,7 +147,7 @@ const toggleBachelorsDisplayStyle = (e) => {
       </template>
       <template v-else>
         <li class="item-bachelor" v-for="bachelor in displayBachelors" :key="bachelor">
-          <BachelorCard :bachelor="bachelor"/>
+          <BachelorCard :bachelor="bachelor" @get-item-delete-id="getItemDeleteId"/>
         </li>
       </template>
     </ul>
