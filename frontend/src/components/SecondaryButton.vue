@@ -22,8 +22,15 @@
 
 <template>
   <div class="text-center">
-    <q-btn flat class="btn btn-secondary" :class="{dashed: props.dashed}" :icon="props.icon" v-if="link" :to="{ name : props.link }" size="md" :label="props.text" />
-    <q-btn flat class="btn btn-secondary" :class="{dashed: props.dashed}" :icon="props.icon" v-else size="md" :label="props.text" />
+    <q-btn
+        flat
+        class="btn btn-secondary"
+        :class="{dashed: props.dashed}"
+        :icon="props.icon"
+        v-if="link"
+        :to="props.link ? { name: props.link } : null"
+        size="md"
+        :label="props.text" />
   </div>
 
 </template>
