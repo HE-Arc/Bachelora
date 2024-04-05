@@ -1,6 +1,6 @@
 <script setup>
 
-import {ref, defineProps, watch} from "vue";
+import {ref, defineProps, watch, toRefs} from "vue";
 
 const emit = defineEmits(['selection-changed', 'submit']);
 
@@ -17,14 +17,38 @@ const emit = defineEmits(['selection-changed', 'submit']);
       type: String,
       required: false
     },
+    edit: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    selectedItems: {
+      type: Array,
+      required: false,
+    }
   });
 
 
-  const model = ref([]);
+const model = ref([]);
+const items = ref([]);
 
-  watch(model, (newValue) => {
+const { edit, selectedItems } = toRefs(props);
+
+watch(items, (newValue) => {
       emit('selection-changed', newValue);
     });
+
+watch(
+  [edit, selectedItems, model],
+  () => {
+    if (props.edit) {
+      items.value = [...props.selectedItems];
+    } else {
+      items.value = [...model.value];
+    }
+  },
+  { deep: true }
+);
 
 </script>
 
@@ -32,13 +56,14 @@ const emit = defineEmits(['selection-changed', 'submit']);
   <div>
     <q-select
         class="chips-items"
-        v-model="model"
+        v-model="items"
         multiple
         :options="props.options"
         option-value="id"
         option-label="name"
         use-chips
         stack-label
+
         :label="props.label">
       <template v-slot:prepend>
         <q-icon :name="props.icon" />

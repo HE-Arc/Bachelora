@@ -5,6 +5,7 @@ import RegisterView from "@/views/RegisterView.vue";
 import BachelorsView from "@/views/BachelorsView.vue";
 import CreateBachelorView from "@/views/CreateBachelorView.vue";
 import BachelorView from "@/views/BachelorView.vue";
+import EditBachelorView from "@/views/EditBachelorView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -50,9 +51,9 @@ const router = createRouter({
       component: CreateBachelorView
     },
     {
-      path: '/bachelors/edit',
+      path: '/bachelors/:id/edit',
       name: 'bachelors.edit',
-      component: HomeView // TODO ListBachelorEditView
+      component: EditBachelorView
     },
     {
       path: '/bachelors/delete',
