@@ -18,9 +18,16 @@ export default {
           negative: '#C10015',
           info: '#31CCEC',
           warning: '#F2C037',
-      }
+      },
+      notify: Notify.setDefaults({
+        position: 'top',
+        timeout: 2500,
+        textColor: 'white',
+        progress: true,
+        actions: [{ icon: 'close', color: 'white' }]
+      }),
   },
   plugins: {
-      Notify
+      Notify,
   },
 }

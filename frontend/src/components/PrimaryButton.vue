@@ -17,8 +17,13 @@
 </script>
 
 <template>
-  <q-btn v-if="link" color="primary" class="btn btn-primary" :to="{ name : props.link }" size="md" :label="props.text" :type="props.type" />
-  <q-btn v-else color="primary" class="btn btn-primary" size="md" :label="props.text" :type="props.type"/>
+  <q-btn
+      color="primary"
+      class="btn btn-primary"
+      :to="props.link ? { name: props.link } : null"
+      size="md"
+      :label="props.text"
+      :type="props.type" />
 </template>
 
 <style scoped lang="scss">
