@@ -44,11 +44,8 @@ onMounted(() => {
 
 <template>
   <section>
-
     <BackButton link="bachelors" />
-
     <Title text="Modification d'un travail de bachelor" />
-
     <EditBachelorForm :bachelor="bachelor" />
   </section>
 </template>

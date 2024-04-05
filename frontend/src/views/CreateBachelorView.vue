@@ -2,10 +2,12 @@
 
 import Title from "@/components/Title.vue";
 import CreateBachelorForm from "@/components/form/CreateBachelorForm.vue";
+import BackButton from "@/components/BackButton.vue";
 </script>
 
 <template>
   <section>
+    <BackButton link="bachelors" />
     <Title text="Nouveau travail de bachelor" />
     <CreateBachelorForm />
   </section>
