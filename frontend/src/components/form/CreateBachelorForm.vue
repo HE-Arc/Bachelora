@@ -6,13 +6,14 @@ import MultiChipsSelect from "@/components/MultiChipsSelect.vue";
 import SecondaryButton from "@/components/SecondaryButton.vue";
 import axios from "axios";
 import router from "@/router/index.js";
+import {useQuasar} from "quasar";
 
 const API_LINK = import.meta.env.VITE_API_LINK;
 
 const title = ref(null);
 const description = ref(null);
 const teacher = ref(null)
-const orientation = ref(null);
+const orientations = ref([]);
 const tags = ref([]);
 
 const tagsItems = ref([]);
@@ -61,26 +62,25 @@ const updateBachelorsItems = (selectedTags) => {
 const success = ref(false);
 const onSubmit = async() => {
     try {
+
+      const selectedOrientationsID = [];
+      for (const item in orientations.value) {
+        selectedOrientationsID.push(orientations.value[item].id);
+      }
+
       success.value = false;
-      await axios.post(API_LINK + "api/bachelor/",
+      const response = await axios.post(API_LINK + "api/bachelor/",
       {
         name: title.value,
         description: description.value,
         teacher: teacher.value.id,
-        orientations: [orientation.value.id],
+        orientations: selectedOrientationsID,
         tags: tags.value
       });
+
       success.value = true;
-
-      // Reset after success send
-      title.value = null;
-      description.value = null;
-      teacher.value = null;
-      orientation.value = null;
-      tags.value = [];
-
-      await router.push("/bachelors");
-
+      showNotif();
+      router.push("/bachelors/" + response.data.id);
     } catch (e) {
       console.log(e);
     }
@@ -94,6 +94,13 @@ const requiredField = (val) => {
       })
 };
 
+const $q = useQuasar();
+const showNotif = () => {
+  $q.notify({
+    type: 'positive',
+    message: 'Nouveau bachelor ajouté !',
+  })
+}
 
 </script>
 
@@ -144,8 +151,9 @@ const requiredField = (val) => {
       </li>
 
       <li class="form-item">
-        <q-select v-model="orientation"
+        <q-select v-model="orientations"
                   :options="orientationItems"
+                  multiple
                   label="Orientation"
                   :rules="[requiredField]"
                   option-value="id"

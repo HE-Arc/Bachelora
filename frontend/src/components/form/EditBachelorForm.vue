@@ -8,7 +8,6 @@ import axios from "axios";
 import MultiChipsSelect from "@/components/MultiChipsSelect.vue";
 import PrimaryButton from "@/components/PrimaryButton.vue";
 import SecondaryButton from "@/components/SecondaryButton.vue";
-import router from "@/router/index.js";
 import {useQuasar} from "quasar";
 
 const API_LINK = import.meta.env.VITE_API_LINK;
@@ -218,5 +217,21 @@ const showNotif = () => {
 </template>
 
 <style scoped lang="scss">
+  .btn-action {
+      margin: 1rem 0;
+  }
+
+  @media only screen and (min-width: 1024px) {
+    .btns {
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+
+      .btn-action {
+        min-width: 45%;
+        max-width: 45%;
+      }
+    }
+  }
 
 </style>
