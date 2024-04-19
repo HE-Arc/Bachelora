@@ -1,6 +1,7 @@
 <script setup>
   import {ref} from "vue";
 
+  const miniState = ref(true);
   const leftDrawerOpen = ref(false);
   const menuList = [
     {
@@ -68,6 +69,11 @@
   <q-drawer
   v-model="leftDrawerOpen"
   v-show="leftDrawerOpen"
+
+  :mini="miniState"
+  @mouseover="miniState = false"
+  @mouseout="miniState = true"
+
   :breakpoint="500"
   bordered
   >
