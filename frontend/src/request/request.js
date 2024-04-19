@@ -10,7 +10,15 @@ class BackendRequest {
 
     static async fetchTagsItems()
     {
-
+        try
+        {
+            return await axios.get(`${(BackendRequest.API_LINK)}api/tag/`);
+        }
+        catch (error)
+        {
+            console.log(error);
+            throw error;
+        }
     }
 
     static async fetchTagItem(id)
@@ -28,7 +36,16 @@ class BackendRequest {
 
     static async fetchBachelors()
     {
-
+        try
+        {
+            const res = await axios.get(`${(BackendRequest.API_LINK)}api/bachelor/`);
+            return res.data.sort((a, b) => b.id - a.id);
+        }
+        catch (error)
+        {
+            console.log(error);
+            throw error;
+        }
     }
 
     static async fetchBachelor(id)
