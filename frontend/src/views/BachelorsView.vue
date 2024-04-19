@@ -1,33 +1,25 @@
 <script setup>
-import axios from "axios";
 import {ref, onMounted, computed} from "vue";
 
 import BachelorCard from "@/components/card/BachelorCard.vue";
 import Title from "@/components/Title.vue";
-
 import SecondaryButton from "@/components/SecondaryButton.vue";
 import MultiChipsSelect from "@/components/MultiChipsSelect.vue";
 import DeleteBachelorForm from "@/components/form/DeleteBachelorForm.vue";
+import BackendRequest from '@/request/request.js';
 
 const tagsItems = ref([]);
-
-const API_LINK = import.meta.env.VITE_API_LINK;
-
 const fetchTagsItems = async () => {
-  const res = await axios.get(API_LINK + "api/tag/");
-
-  tagsItems.value = res.data;
+  tagsItems.value = (await BackendRequest.fetchTagsItems()).data;
 };
-
 
 let originalBachelorsItems;
 const bachelorsItems = ref([]);
 
 const fetchBachelorsItems = async () => {
-  const res = await axios.get(API_LINK + "api/bachelor/");
-  const sortedData = res.data.sort((a, b) => b.id - a.id);
-  bachelorsItems.value = sortedData;
-  originalBachelorsItems = sortedData;
+  const res = await BackendRequest.fetchBachelors();
+  bachelorsItems.value = res;
+  originalBachelorsItems = res;
 };
 
 let previousFilteredBachelorsItems = [];
