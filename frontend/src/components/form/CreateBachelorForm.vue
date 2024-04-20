@@ -18,19 +18,19 @@ const tags = ref([]);
 const tagsItems = ref([]);
 
 const fetchTagsItems = async () => {
-  const res = await BackendRequest.fetchTagsItems();
+  const res = await BackendRequest.fetchAllTags();
   tagsItems.value = res.data;
 };
 
 const orientationItems = ref([]);
 const fetchOrientationItems = async () => {
-  const res = await BackendRequest.fetchOrientationItems();
+  const res = await BackendRequest.fetchAllOrientations();
   orientationItems.value = res.data;
 };
 
 const teachersItems = ref([]);
 const fetchTeachersItems = async () => {
-    const res = await BackendRequest.fetchAllTeacher();
+    const res = await BackendRequest.fetchAllTeachers();
     teachersItems.value = res.data.map(teacher => {
       teacher.fullname = `${teacher.first_name} ${teacher.last_name}`;
       return {
