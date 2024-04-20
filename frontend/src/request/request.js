@@ -5,7 +5,15 @@ class BackendRequest {
 
     static async fetchOrientationItems()
     {
-
+        try
+        {
+            return await axios.get(BackendRequest.API_LINK + "api/orientation/");
+        }
+        catch (error)
+        {
+            console.log(error);
+            throw error;
+        }
     }
 
     static async fetchTagsItems()
@@ -88,6 +96,32 @@ class BackendRequest {
     {
         const res = await BackendRequest.fetchTeacher(id);
         return res.data.first_name + " " + res.data.last_name;
+    }
+
+    static async fetchAllTeacher()
+    {
+        try
+        {
+            return await axios.get(BackendRequest.API_LINK + "api/teacher/");
+        }
+        catch (error)
+        {
+            console.log(error);
+            throw error;
+        }
+    }
+
+    static async createBachelor(data)
+    {
+        try
+        {
+            return await axios.post(BackendRequest.API_LINK + "api/bachelor/", data);
+        }
+        catch (error)
+        {
+            console.log(error);
+            throw error;
+        }
     }
 }
 
