@@ -3,7 +3,7 @@ import axios from "axios";
 class BackendRequest {
     static API_LINK = import.meta.env.VITE_API_LINK;
 
-    static async fetchOrientationItems()
+    static async fetchAllOrientations()
     {
         try
         {
@@ -16,7 +16,7 @@ class BackendRequest {
         }
     }
 
-    static async fetchTagsItems()
+    static async fetchAllTags()
     {
         try
         {
@@ -29,7 +29,7 @@ class BackendRequest {
         }
     }
 
-    static async fetchTagItem(id)
+    static async fetchTagById(id)
     {
         try
         {
@@ -42,7 +42,7 @@ class BackendRequest {
         }
     }
 
-    static async fetchBachelors()
+    static async fetchAllBachelors()
     {
         try
         {
@@ -56,7 +56,7 @@ class BackendRequest {
         }
     }
 
-    static async fetchBachelor(id)
+    static async fetchBachelorById(id)
     {
         try {
             const response = await axios.get(`${BackendRequest.API_LINK}api/bachelor/${id}/`);
@@ -65,7 +65,7 @@ class BackendRequest {
             // Get bachelor items
             bachelorData.tagsItems = [];
             for (const tagId of bachelorData.tags) {
-                const tags = await BackendRequest.fetchTagItem(tagId);
+                const tags = await BackendRequest.fetchTagById(tagId);
                 bachelorData.tagsItems.push(tags.data);
             }
 
@@ -79,7 +79,7 @@ class BackendRequest {
         }
     }
 
-    static async fetchTeacher(id)
+    static async fetchTeacherById(id)
     {
         try
         {
@@ -94,11 +94,11 @@ class BackendRequest {
 
     static async getTeacherName(id)
     {
-        const res = await BackendRequest.fetchTeacher(id);
+        const res = await BackendRequest.fetchTeacherById(id);
         return res.data.first_name + " " + res.data.last_name;
     }
 
-    static async fetchAllTeacher()
+    static async fetchAllTeachers()
     {
         try
         {

@@ -12,7 +12,7 @@ const id = computed(() => route.params.id);
 
 const bachelor = ref([]);
 const fetchBachelor = async () => {
-  bachelor.value = await BackendRequest.fetchBachelor(id.value);
+  bachelor.value = await BackendRequest.fetchBachelorById(id.value);
 };
 
 onMounted(() => {

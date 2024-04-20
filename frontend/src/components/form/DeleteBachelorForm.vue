@@ -57,7 +57,7 @@ const bachelor = ref(null);
 const fetchBachelor = async () => {
   if (props.itemDeleteId)
   {
-    bachelor.value = await BackendRequest.fetchBachelor(props.itemDeleteId);
+    bachelor.value = await BackendRequest.fetchBachelorById(props.itemDeleteId);
   }
 }
 

@@ -37,7 +37,7 @@ const requiredField = (val) => {
 // Get all orientations
 const orientationItems = ref([]);
 const fetchOrientationItems = async () => {
-  const res = await BackendRequest.fetchOrientationItems();
+  const res = await BackendRequest.fetchAllOrientations();
   orientationItems.value = res.data;
 };
 
@@ -68,7 +68,7 @@ watch(
 // Get all tags
 const tagsItems = ref([]);
 const fetchTagsItems = async () => {
-  const res = await BackendRequest.fetchTagsItems();
+  const res = await BackendRequest.fetchAllTags();
   tagsItems.value = res.data;
 };
 
