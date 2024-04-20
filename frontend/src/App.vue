@@ -27,13 +27,15 @@ onBeforeUnmount(() => {
 <template>
   <q-layout view="lHh LpR lFf" style="min-height: 90vh">
     <NavBar />
-    <q-page-container>
+    <q-page-container style="padding-top: 25px;">
       <main>
-        <router-view v-slot="{ Component }">
-          <transition name="fade" mode="out-in">
-            <component :is="Component" />
-          </transition>
-        </router-view>
+        <div class="wrapper">
+          <router-view v-slot="{ Component }">
+            <transition name="fade" mode="out-in">
+              <component :is="Component" />
+            </transition>
+          </router-view>
+        </div>
       </main>
 
       <q-page-sticky position="bottom-right" :offset="[18, 18]" v-show="showScrollButton">
@@ -52,6 +54,12 @@ onBeforeUnmount(() => {
   .fade-enter-from,
   .fade-leave-to {
     opacity: 0;
+  }
+
+  .wrapper
+  {
+    max-width: 980px;
+    margin: 0 auto;
   }
 
   #app {
