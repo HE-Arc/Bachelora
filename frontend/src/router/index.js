@@ -6,6 +6,7 @@ import BachelorsView from "@/views/BachelorsView.vue";
 import CreateBachelorView from "@/views/CreateBachelorView.vue";
 import BachelorView from "@/views/BachelorView.vue";
 import EditBachelorView from "@/views/EditBachelorView.vue";
+import NotFoundView from "@/views/NotFoundView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -56,18 +57,13 @@ const router = createRouter({
       component: EditBachelorView
     },
     {
-      path: '/bachelors/delete',
-      name: 'bachelors.delete',
-      component: HomeView // TODO ListBachelorDeleteView
-    },
-    {
       path: '/chosen-bachelors',
       name: 'chosen-bachelors',
       component: HomeView // TODO ChosenBachelorView
     },
     {
       path: '/404',
-      component: HomeView // TODO 404View
+      component: NotFoundView
     },
     {
         path: '/:catchAll(.*)',
