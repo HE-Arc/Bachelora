@@ -36,6 +36,7 @@
       <li class="form-item">
         <q-input color="primary"
                  autofocus
+                 autocomplete="mail"
                  v-model="email"
                  label="Adresse e-mail"
                  :rules="[requiredField]">
@@ -47,6 +48,7 @@
 
       <li class="form-item">
         <q-input v-model="password"
+                 autocomplete="current-password"
                  :type="showPassword ? 'password' : 'text'"
                  label="Mot de passe"
                  :rules="[requiredField]">
@@ -64,7 +66,7 @@
       </li>
 
       <li class="form-item">
-        <PrimaryButton text="Connexion" />
+        <PrimaryButton text="Connexion" type="submit"/>
       </li>
 
       <li class="form-item">
