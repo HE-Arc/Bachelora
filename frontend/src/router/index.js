@@ -8,6 +8,7 @@ import BachelorView from "@/views/BachelorView.vue";
 import EditBachelorView from "@/views/EditBachelorView.vue";
 import NotFoundView from "@/views/NotFoundView.vue";
 import ChosenBachelorView from "@/views/ChosenBachelorView.vue";
+import LogoutView from "@/views/LogoutView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -30,7 +31,7 @@ const router = createRouter({
     {
       path: '/logout',
       name: 'logout',
-      component: HomeView // TODO LogoutView
+      component: LogoutView
     },
     {
       path: '/account',
