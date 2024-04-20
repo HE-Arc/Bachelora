@@ -1,11 +1,12 @@
 <script setup>
 
-import {ref, defineProps, defineEmits, watch} from "vue";
+import {defineEmits, defineProps, ref, watch} from "vue";
+import {useQuasar} from "quasar";
+
 import Title from "@/components/Title.vue";
 import PrimaryButton from "@/components/PrimaryButton.vue";
 import SecondaryButton from "@/components/SecondaryButton.vue";
-import axios from "axios";
-import {useQuasar} from "quasar";
+import BackendRequest from "@/request/request.js";
 
 const props = defineProps({
   title: {
@@ -35,8 +36,6 @@ const props = defineProps({
   }
 })
 
-const API_LINK = import.meta.env.VITE_API_LINK;
-
 const dialog = ref(props.state);
 watch(() => props.state, (newValue) => {
   if(newValue === true)
@@ -45,7 +44,6 @@ watch(() => props.state, (newValue) => {
   }
   dialog.value = newValue;
 });
-
 
 const closeDialog = () => {
   dialog.value = false;
@@ -59,28 +57,16 @@ const bachelor = ref(null);
 const fetchBachelor = async () => {
   if (props.itemDeleteId)
   {
-    try
-    {
-      const bachelorData = await axios.get(`${API_LINK}api/bachelor/${props.itemDeleteId}/`);
-      bachelor.value = bachelorData.data;
-    } catch (error) {
-      console.error(`Erreur lors de la récupération du bachelor ayant l'id ${props.itemDeleteId} : `, error);
-    }
+    bachelor.value = await BackendRequest.fetchBachelor(props.itemDeleteId);
   }
 }
 
-const success = ref(false);
 const deleteItem = async () => {
   if (props.itemDeleteId)
   {
-    try {
-      success.value = false;
-      await axios.delete(`${API_LINK}api/bachelor/${props.itemDeleteId}/`);
-      success.value = true;
-      showNotif();
-    } catch (error) {
-      console.error(`Erreur lors de la suppression du bachelor ayant l'id ${props.itemDeleteId} : `, error);
-    }
+    await BackendRequest.deleteBachelor(props.itemDeleteId);
+
+    showNotif();
     closeDialog();
   }
 };
