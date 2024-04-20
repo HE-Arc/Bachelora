@@ -10,14 +10,14 @@ import BackendRequest from '@/request/request.js';
 
 const tagsItems = ref([]);
 const fetchTagsItems = async () => {
-  tagsItems.value = (await BackendRequest.fetchTagsItems()).data;
+  tagsItems.value = (await BackendRequest.fetchAllTags()).data;
 };
 
 let originalBachelorsItems;
 const bachelorsItems = ref([]);
 
 const fetchBachelorsItems = async () => {
-  const res = await BackendRequest.fetchBachelors();
+  const res = await BackendRequest.fetchAllBachelors();
   bachelorsItems.value = res;
   originalBachelorsItems = res;
 };
