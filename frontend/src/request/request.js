@@ -59,7 +59,7 @@ class BackendRequest {
     static async fetchBachelor(id)
     {
         try {
-            const response = await axios.get(`${BackendRequest.API_LINK}api/bachelor/${id.value}/`);
+            const response = await axios.get(`${BackendRequest.API_LINK}api/bachelor/${id}/`);
             const bachelorData = response.data;
 
             // Get bachelor items
@@ -135,6 +135,20 @@ class BackendRequest {
             console.log(error);
             throw error;
         }
+    }
+
+    static async deleteBachelor(id)
+    {
+        try
+        {
+            return await axios.delete(`${(BackendRequest.API_LINK)}api/bachelor/${id}/`);
+        }
+        catch (error)
+        {
+            console.log(error);
+            throw error;
+        }
+
     }
 }
 
