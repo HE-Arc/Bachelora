@@ -123,6 +123,19 @@ class BackendRequest {
             throw error;
         }
     }
+
+    static async updateBachelor(id, data)
+    {
+        try
+        {
+            return await axios.put(BackendRequest.API_LINK + "api/bachelor/" + id + "/", data);
+        }
+        catch (error)
+        {
+            console.log(error);
+            throw error;
+        }
+    }
 }
 
 export default BackendRequest;

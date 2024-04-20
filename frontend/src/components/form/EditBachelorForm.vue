@@ -2,15 +2,13 @@
 
 // Imports
 import {onMounted, ref, computed, watch, onUpdated} from "vue";
-import axios from "axios";
 
 // Imports components
 import MultiChipsSelect from "@/components/MultiChipsSelect.vue";
 import PrimaryButton from "@/components/PrimaryButton.vue";
 import SecondaryButton from "@/components/SecondaryButton.vue";
 import {useQuasar} from "quasar";
-
-const API_LINK = import.meta.env.VITE_API_LINK;
+import BackendRequest from "@/request/request.js";
 
 const props = defineProps({
   bachelor: {
@@ -18,7 +16,6 @@ const props = defineProps({
     required: true
   }
 });
-
 
 const title = ref('');
 const description = ref('');
@@ -40,7 +37,7 @@ const requiredField = (val) => {
 // Get all orientations
 const orientationItems = ref([]);
 const fetchOrientationItems = async () => {
-  const res = await axios.get(API_LINK + "api/orientation/");
+  const res = await BackendRequest.fetchOrientationItems();
   orientationItems.value = res.data;
 };
 
@@ -71,7 +68,7 @@ watch(
 // Get all tags
 const tagsItems = ref([]);
 const fetchTagsItems = async () => {
-  const res = await axios.get(API_LINK + "api/tag/");
+  const res = await BackendRequest.fetchTagsItems();
   tagsItems.value = res.data;
 };
 
@@ -109,36 +106,30 @@ onUpdated(() => {
   teacher.value = props.bachelor.teacher;
 })
 
-const success = ref(false);
+
 const onSubmit = async() => {
-    try {
 
-      const selectedOrientationID = [];
-      for (const item in selectedOrientations.value) {
-        selectedOrientationID.push(selectedOrientations.value[item].id);
-      }
-
-      const selectedTagsID = [];
-      for (const item in tags.value) {
-        selectedTagsID.push(tags.value[item]);
-      }
-
-      success.value = false;
-      await axios.put(API_LINK + "api/bachelor/" + props.bachelor.id + "/",
-      {
-        url: props.bachelor.url,
-        id: props.bachelor.id,
-        name: title.value,
-        description: description.value,
-        teacher: teacher.value,
-        tags: selectedTagsID,
-        orientations: selectedOrientationID,
-      });
-      success.value = true;
-      showNotif();
-    } catch (e) {
-      console.log(e);
+    const selectedOrientationID = [];
+    for (const item in selectedOrientations.value) {
+      selectedOrientationID.push(selectedOrientations.value[item].id);
     }
+
+    const selectedTagsID = [];
+    for (const item in tags.value) {
+      selectedTagsID.push(tags.value[item]);
+    }
+
+    await BackendRequest.updateBachelor(props.bachelor.id, {
+      url: props.bachelor.url,
+      id: props.bachelor.id,
+      name: title.value,
+      description: description.value,
+      teacher: teacher.value,
+      tags: selectedTagsID,
+      orientations: selectedOrientationID,
+    });
+
+    showNotif();
 }
 
 const $q = useQuasar();
