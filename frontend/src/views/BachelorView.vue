@@ -12,11 +12,7 @@ const id = computed(() => route.params.id);
 
 const bachelor = ref([]);
 const fetchBachelor = async () => {
-  try {
-    bachelor.value = await BackendRequest.fetchBachelor(id);
-  } catch (error) {
-    console.error(`Erreur lors de la récupération des données du bachelor : `, error);
-  }
+  bachelor.value = await BackendRequest.fetchBachelor(id);
 };
 
 onMounted(() => {
@@ -35,7 +31,7 @@ onMounted(() => {
 
     <br>
 
-    <p>Enseignant ayant entré le travail : <em>{{ bachelor.teacher }}</em></p>
+    <p>Enseignant ayant entré le travail : <em>{{ bachelor.teacherName }}</em></p>
     <div class="text-center">
       <q-chip v-for="tag in bachelor.tagsItems" :key="tag">
         {{ tag.name }}
