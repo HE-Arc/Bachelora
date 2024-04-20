@@ -22,22 +22,25 @@ onMounted(() => {
 </script>
 
 <template>
-  <section>
-    <BackButton />
+  <div>
+    <section>
+      <BackButton />
 
-    <Title :text="bachelor.name"/>
+      <Title :text="bachelor.name"/>
 
-    <p class="q-my-auto text-justify">{{ bachelor.description }}</p>
+      <p class="q-my-auto text-justify">{{ bachelor.description }}</p>
 
-    <br>
+      <br>
 
-    <p>Enseignant ayant entré le travail : <em>{{ bachelor.teacherName }}</em></p>
-    <div class="text-center">
-      <q-chip v-for="tag in bachelor.tagsItems" :key="tag">
-        {{ tag.name }}
-      </q-chip>
-    </div>
-  </section>
+      <p>Enseignant ayant entré le travail : <em>{{ bachelor.teacherName }}</em></p>
+
+      <div class="text-center">
+        <q-chip v-for="tag in bachelor.tagsItems" :key="tag">
+          {{ tag.name }}
+        </q-chip>
+      </div>
+    </section>
+  </div>
 </template>
 
 <style scoped lang="scss">
