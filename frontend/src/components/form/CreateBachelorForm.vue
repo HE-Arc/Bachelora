@@ -4,11 +4,10 @@ import {onMounted, ref} from 'vue'
 import PrimaryButton from "@/components/PrimaryButton.vue";
 import MultiChipsSelect from "@/components/MultiChipsSelect.vue";
 import SecondaryButton from "@/components/SecondaryButton.vue";
-import axios from "axios";
 import router from "@/router/index.js";
 import {useQuasar} from "quasar";
+import BackendRequest from "@/request/request.js";
 
-const API_LINK = import.meta.env.VITE_API_LINK;
 
 const title = ref(null);
 const description = ref(null);
@@ -19,21 +18,19 @@ const tags = ref([]);
 const tagsItems = ref([]);
 
 const fetchTagsItems = async () => {
-  const res = await axios.get(API_LINK + "api/tag/");
-
+  const res = await BackendRequest.fetchTagsItems();
   tagsItems.value = res.data;
 };
 
 const orientationItems = ref([]);
 const fetchOrientationItems = async () => {
-  const res = await axios.get(API_LINK + "api/orientation/");
+  const res = await BackendRequest.fetchOrientationItems();
   orientationItems.value = res.data;
 };
 
 const teachersItems = ref([]);
 const fetchTeachersItems = async () => {
-  try {
-    const res = await axios.get(API_LINK + "api/teacher/");
+    const res = await BackendRequest.fetchAllTeacher();
     teachersItems.value = res.data.map(teacher => {
       teacher.fullname = `${teacher.first_name} ${teacher.last_name}`;
       return {
@@ -41,9 +38,6 @@ const fetchTeachersItems = async () => {
         fullname: teacher.fullname
       }
     });
-  } catch (error) {
-    console.error(`Erreur lors de la récupération des enseignants : `, error);
-  }
 };
 
 onMounted(() => {
@@ -59,31 +53,23 @@ const updateBachelorsItems = (selectedTags) => {
   }
 }
 
-const success = ref(false);
 const onSubmit = async() => {
-    try {
 
-      const selectedOrientationsID = [];
-      for (const item in orientations.value) {
-        selectedOrientationsID.push(orientations.value[item].id);
-      }
-
-      success.value = false;
-      const response = await axios.post(API_LINK + "api/bachelor/",
-      {
-        name: title.value,
-        description: description.value,
-        teacher: teacher.value.id,
-        orientations: selectedOrientationsID,
-        tags: tags.value
-      });
-
-      success.value = true;
-      showNotif();
-      router.push("/bachelors/" + response.data.id);
-    } catch (e) {
-      console.log(e);
+    const selectedOrientationsID = [];
+    for (const item in orientations.value) {
+      selectedOrientationsID.push(orientations.value[item].id);
     }
+
+    const response = await BackendRequest.createBachelor({
+      name: title.value,
+      description: description.value,
+      teacher: teacher.value.id,
+      orientations: selectedOrientationsID,
+      tags: tags.value
+    });
+
+    showNotif();
+    router.push("/bachelors/" + response.data.id);
 }
 
 const requiredField = (val) => {
