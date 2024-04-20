@@ -70,7 +70,7 @@ class BackendRequest {
             }
 
             // Get bachelor teacher name
-            bachelorData.teacher = await BackendRequest.getTeacherName(bachelorData.teacher);
+            bachelorData.teacherName = await BackendRequest.getTeacherName(bachelorData.teacher);
 
             return bachelorData;
         } catch (error) {
