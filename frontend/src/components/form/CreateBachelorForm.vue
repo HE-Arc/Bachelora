@@ -1,12 +1,13 @@
 <script setup>
 
 import {onMounted, ref} from 'vue'
+
+import router from "@/router/index.js";
+import BackendRequest from "@/request/request.js";
+
 import PrimaryButton from "@/components/PrimaryButton.vue";
 import MultiChipsSelect from "@/components/MultiChipsSelect.vue";
 import SecondaryButton from "@/components/SecondaryButton.vue";
-import router from "@/router/index.js";
-import {useQuasar} from "quasar";
-import BackendRequest from "@/request/request.js";
 
 
 const title = ref(null);
@@ -68,8 +69,7 @@ const onSubmit = async() => {
       tags: tags.value
     });
 
-    showNotif();
-    router.push("/bachelors/" + response.data.id);
+    await router.push("/bachelors/" + response.data.id);
 }
 
 const requiredField = (val) => {
@@ -79,14 +79,6 @@ const requiredField = (val) => {
         }, 1000)
       })
 };
-
-const $q = useQuasar();
-const showNotif = () => {
-  $q.notify({
-    type: 'positive',
-    message: 'Nouveau bachelor ajouté !',
-  })
-}
 
 </script>
 
