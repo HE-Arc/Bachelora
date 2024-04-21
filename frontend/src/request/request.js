@@ -1,4 +1,5 @@
 import axios from "axios";
+import Notification from "@/notifications/notifications.js";
 
 class BackendRequest {
     static API_LINK = import.meta.env.VITE_API_LINK;
@@ -17,6 +18,7 @@ class BackendRequest {
         }
         catch (error)
         {
+            Notification.failed("Impossible de récupérer la liste des orientations");
             console.log(error);
             throw error;
         }
@@ -36,6 +38,7 @@ class BackendRequest {
         }
         catch (error)
         {
+            Notification.failed("Impossible de récupérer la liste des tags");
             console.log(error);
             throw error;
         }
@@ -57,6 +60,7 @@ class BackendRequest {
         }
         catch (error)
         {
+            Notification.failed("Impossible de récupérer le tag");
             console.log(error);
             throw error;
         }
@@ -79,6 +83,7 @@ class BackendRequest {
         }
         catch (error)
         {
+            Notification.failed("Impossible de récupérer la liste des bachelors");
             console.log(error);
             throw error;
         }
@@ -92,6 +97,7 @@ class BackendRequest {
         }
         catch (error)
         {
+            Notification.failed("Impossible de récupérer votre sélection de bachelors");
             console.log(error);
             throw error;
         }
@@ -122,6 +128,7 @@ class BackendRequest {
 
             return bachelorData;
         } catch (error) {
+            Notification.failed("Impossible de récupérer les informations sur le bachelor");
             console.log(error);
             throw error;
         }
@@ -141,6 +148,7 @@ class BackendRequest {
         }
         catch (error)
         {
+            Notification.failed("Impossible de récupérer la liste des enseignants");
             console.log(error);
             throw error;
         }
@@ -162,6 +170,7 @@ class BackendRequest {
         }
         catch (error)
         {
+            Notification.failed("Impossible de récupérer l'enseignant'");
             console.log(error);
             throw error;
         }
@@ -194,10 +203,15 @@ class BackendRequest {
     {
         try
         {
-            return await axios.post(BackendRequest.API_LINK + "api/bachelor/", data);
+            const res = await axios.post(BackendRequest.API_LINK + "api/bachelor/", data);
+
+            Notification.success("Nouveau bachelor ajouté !");
+
+            return res;
         }
         catch (error)
         {
+            Notification.failed("Impossible d'ajouter le nouveau bachelor");
             console.log(error);
             throw error;
         }
@@ -214,6 +228,7 @@ class BackendRequest {
         }
         catch (error)
         {
+            Notification.failed("Impossible d'ajouter le bachelor à votre sélection");
             console.log(error);
             throw error;
         }
@@ -232,6 +247,7 @@ class BackendRequest {
         }
         catch (error)
         {
+            Notification.failed("Impossible de retirer le bachelor de votre sélection");
             console.log(error);
             throw error;
         }
@@ -255,6 +271,7 @@ class BackendRequest {
         }
         catch (error)
         {
+            Notification.failed("Impossible de modifier le bachelor");
             console.log(error);
             throw error;
         }
@@ -277,6 +294,7 @@ class BackendRequest {
         }
         catch (error)
         {
+            Notification.failed("Impossible de supprimer le bachelor");
             console.log(error);
             throw error;
         }
