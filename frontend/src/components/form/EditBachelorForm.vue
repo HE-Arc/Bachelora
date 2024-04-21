@@ -3,12 +3,12 @@
 // Imports
 import {onMounted, ref, computed, watch, onUpdated} from "vue";
 
+import BackendRequest from "@/request/request.js";
+
 // Imports components
 import MultiChipsSelect from "@/components/MultiChipsSelect.vue";
 import PrimaryButton from "@/components/PrimaryButton.vue";
 import SecondaryButton from "@/components/SecondaryButton.vue";
-import {useQuasar} from "quasar";
-import BackendRequest from "@/request/request.js";
 
 const props = defineProps({
   bachelor: {
@@ -94,7 +94,6 @@ const selectedTagsLabel = computed( () => {
   return selectedTags;
 });
 
-
 onMounted(() => {
   fetchOrientationItems();
   fetchTagsItems();
@@ -128,16 +127,6 @@ const onSubmit = async() => {
       tags: selectedTagsID,
       orientations: selectedOrientationID,
     });
-
-    showNotif();
-}
-
-const $q = useQuasar();
-const showNotif = () => {
-  $q.notify({
-    type: 'positive',
-    message: 'Modification effectuée avec succès !',
-  })
 }
 
 </script>
@@ -224,5 +213,4 @@ const showNotif = () => {
       }
     }
   }
-
 </style>
