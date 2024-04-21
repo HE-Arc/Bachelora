@@ -74,6 +74,21 @@ ul {
   padding: 0.75rem !important;
 }
 
+.message-alert-title {
+  display: block;
+  font-weight: bold;
+  font-size: 120%;
+  margin-bottom: 0.5rem;
+}
+
+.message-alert {
+  color: white;
+  font-weight: bold;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  cursor: pointer;
+}
+
 
 .q-chip {
   background-color: $secondary !important;
