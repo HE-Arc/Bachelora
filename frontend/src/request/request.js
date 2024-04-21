@@ -84,6 +84,19 @@ class BackendRequest {
         }
     }
 
+    static async fetchAllBachelorsFromStudentById(id)
+    {
+        try
+        {
+            return await axios.get(`${(this.API_LINK)}api/student/${id}/`);
+        }
+        catch (error)
+        {
+            console.log(error);
+            throw error;
+        }
+    }
+
     /**
      * Uses axios to fetch a bachelor data by its ID from a specified API endpoint asynchronously.
      *
@@ -182,6 +195,40 @@ class BackendRequest {
         try
         {
             return await axios.post(BackendRequest.API_LINK + "api/bachelor/", data);
+        }
+        catch (error)
+        {
+            console.log(error);
+            throw error;
+        }
+    }
+
+    static async addBachelorToStudentSelection(idStudent, idBachelor)
+    {
+        try
+        {
+            return await axios.post(`${(BackendRequest.API_LINK)}api/student/${idStudent}/add_bachelor/`,
+            {
+              bachelor_id: idBachelor,
+            });
+        }
+        catch (error)
+        {
+            console.log(error);
+            throw error;
+        }
+    }
+
+    static async removeBachelorToStudentSelection(idStudent, idBachelor)
+    {
+        try
+        {
+            return await axios.delete(`${(BackendRequest.API_LINK)}api/student/${idStudent}/remove_bachelor/`, {
+                data:
+                    {
+                        bachelor_id: idBachelor
+                    }
+            });
         }
         catch (error)
         {

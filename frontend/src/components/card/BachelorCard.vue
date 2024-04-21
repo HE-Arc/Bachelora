@@ -1,11 +1,9 @@
 <script setup>
 
   import {ref, defineProps, onMounted } from "vue";
-  import axios from "axios";
   import router from "@/router/index.js";
   import {useQuasar} from "quasar";
-
-  const API_LINK = import.meta.env.VITE_API_LINK;
+  import BackendRequest from "@/request/request.js";
 
   const props = defineProps({
     bachelor: {
@@ -25,34 +23,21 @@
   const tagsItems = ref([]);
   const fetchTagsItems = async () => {
     for (const id of props.bachelor.tags) {
-      try {
-        const res = await axios.get(`${API_LINK}api/tag/${id}/`);
-        tagsItems.value.push(res.data);
-      } catch (error) {
-        console.error(`Erreur lors de la récupération des tags : `, error);
-      }
+      const res = await BackendRequest.fetchTagById(id);
+      tagsItems.value.push(res.data);
     }
   };
 
   const teacherName = ref('');
   const fetchTeacher = async () => {
-    try {
-      const res = await axios.get(`${API_LINK}api/teacher/${props.bachelor.teacher}/`);
-      teacherName.value = res.data.first_name + " " + res.data.last_name;
-    } catch (error) {
-      console.error(`Erreur lors de la récupération des tags : `, error);
-    }
+    teacherName.value = await BackendRequest.getTeacherName(props.bachelor.teacher);
   };
 
   const choosen_bachelor = ref([]);
   const fetchSelectBachelor = async() => {
   // TODO Adding student id
-  await axios.get(`${API_LINK}api/student/4/`)
-      .then(response => {
-        choosen_bachelor.value = response.data.bachelors;
-      }).catch(error => {
-        console.log(error.data);
-      });
+    const res = await BackendRequest.fetchAllBachelorsFromStudentById(4);
+    choosen_bachelor.value = res.data.bachelors;
   };
 
   onMounted(() => {
@@ -76,33 +61,20 @@
 
   // Student configuration
   // TODO Get user type
-  const is_student = ref(false)
+  const is_student = ref(true);
 
   const addToSelection = async () => {
     // TODO Adding student id
-    await axios.post(`${API_LINK}api/student/4/add_bachelor/`,
-    {
-      bachelor_id: props.bachelor.id,
-    })
-    .then(() => {
-      showNotif(`Bachelor <em>${props.bachelor.name}</em> ajouté dans votre sélection de bachelor !`);
-      fetchSelectBachelor();
-    })
-    .catch(() => {
-      showNotif(`Une erreur est survenue lors de l'ajout du bachelor. Veuillez réessayer ultérieurement.`, 'negative');
-    });
-  }
+    await BackendRequest.addBachelorToStudentSelection(4, props.bachelor.id);
+    showNotif(`Bachelor <em>${props.bachelor.name}</em> ajouté dans votre sélection de bachelor !`);
+    await fetchSelectBachelor();
+  };
 
   const removeFromSelection = async () => {
       // TODO Adding student id
-      await axios.delete(`${API_LINK}api/student/4/remove_bachelor/`, { data: { bachelor_id: props.bachelor.id }})
-      .then(() => {
-        showNotif(`Bachelor <em>${props.bachelor.name}</em> retiré dans votre sélection de bachelor !`);
-        fetchSelectBachelor();
-      })
-      .catch(() => {
-        showNotif(`Une erreur est survenue lors de la suppression du bachelor. Veuillez réessayer ultérieurement.`, 'negative');
-      });
+      await BackendRequest.removeBachelorToStudentSelection(4, props.bachelor.id);
+      showNotif(`Bachelor <em>${props.bachelor.name}</em> retiré dans votre sélection de bachelor !`);
+      await fetchSelectBachelor();
   }
 
 </script>
