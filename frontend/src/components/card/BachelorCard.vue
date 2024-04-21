@@ -2,7 +2,6 @@
 
   import {ref, defineProps, onMounted } from "vue";
   import router from "@/router/index.js";
-  import {useQuasar} from "quasar";
   import BackendRequest from "@/request/request.js";
 
   const props = defineProps({
@@ -11,14 +10,6 @@
       required: true
     },
   });
-
-  const $q = useQuasar();
-  const showNotif = (message, type = 'positive') => {
-    $q.notify({
-      type: type,
-      message: `${message}`,
-    });
-  }
 
   const tagsItems = ref([]);
   const fetchTagsItems = async () => {
@@ -61,19 +52,17 @@
 
   // Student configuration
   // TODO Get user type
-  const is_student = ref(true);
+  const is_student = ref(false);
 
   const addToSelection = async () => {
     // TODO Adding student id
-    await BackendRequest.addBachelorToStudentSelection(4, props.bachelor.id);
-    showNotif(`Bachelor <em>${props.bachelor.name}</em> ajouté dans votre sélection de bachelor !`);
+    await BackendRequest.addBachelorToStudentSelection(4, props.bachelor.id, props.bachelor.name);
     await fetchSelectBachelor();
   };
 
   const removeFromSelection = async () => {
       // TODO Adding student id
-      await BackendRequest.removeBachelorToStudentSelection(4, props.bachelor.id);
-      showNotif(`Bachelor <em>${props.bachelor.name}</em> retiré dans votre sélection de bachelor !`);
+      await BackendRequest.removeBachelorToStudentSelection(4, props.bachelor.id, props.bachelor.name);
       await fetchSelectBachelor();
   }
 

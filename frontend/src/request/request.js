@@ -1,3 +1,7 @@
+/**
+ * Part on the documentation of the methodes generate with the Mintlify Doc Writer extension
+ */
+
 import axios from "axios";
 import Notification from "@/notifications/notifications.js";
 
@@ -6,6 +10,7 @@ class BackendRequest {
 
     /**
      * Uses axios to fetch all orientations data from a specific API endpoint asynchronously.
+     * Display a failure notification if there is an error.
      *
      * @returns Return a promise that resolves to the result
      * of the axios GET request to the specified API endpoint for orientations.
@@ -19,13 +24,13 @@ class BackendRequest {
         catch (error)
         {
             Notification.failed("Impossible de récupérer la liste des orientations");
-            console.log(error);
             throw error;
         }
     }
 
     /**
      * Uses axios to fetch all tags data from a specified API endpoint asynchronously.
+     * Display a failure notification if there is an error.
      *
      * @returns Return a promise that resolves to the result of the
      * axios GET request to the API endpoint for fetching all tags.
@@ -39,13 +44,13 @@ class BackendRequest {
         catch (error)
         {
             Notification.failed("Impossible de récupérer la liste des tags");
-            console.log(error);
             throw error;
         }
     }
 
     /**
      * Uses axios to fetch a tag data by its ID from a specified API endpoint asynchronously.
+     * Display a failure notification if there is an error.
      *
      * @param id - The `id` parameter is used to specify the unique
      * identifier of the tag that you want to fetch from the backend API.
@@ -61,7 +66,6 @@ class BackendRequest {
         catch (error)
         {
             Notification.failed("Impossible de récupérer le tag");
-            console.log(error);
             throw error;
         }
     }
@@ -69,6 +73,7 @@ class BackendRequest {
     /**
      * Uses axios to fetch all bachelors data from a specified API endpoint asynchronously
      * and sorts it based on the ID in descending order.
+     * Display a failure notification if there is an error.
      *
      * @returns Return a sorted array of bachelor data fetched
      * from the API endpoint. The data is sorted based on the `id` property in
@@ -84,11 +89,19 @@ class BackendRequest {
         catch (error)
         {
             Notification.failed("Impossible de récupérer la liste des bachelors");
-            console.log(error);
             throw error;
         }
     }
 
+    /**
+     * Uses axios to fetches all bachelor data for a student with a specific ID from a specified API endpoint asynchronously
+     * Display a failure notification if there is an error.
+     *
+     * @param id - The `id` parameter is used to specify the student ID for
+     * which you want to fetch all the bachelor information.
+     * @returns Return the result of the GET request to the API endpoint for fetching all bachelors
+     * associated with a student ID.
+     */
     static async fetchAllBachelorsFromStudentById(id)
     {
         try
@@ -98,13 +111,13 @@ class BackendRequest {
         catch (error)
         {
             Notification.failed("Impossible de récupérer votre sélection de bachelors");
-            console.log(error);
             throw error;
         }
     }
 
     /**
      * Uses axios to fetch a bachelor data by its ID from a specified API endpoint asynchronously.
+     * Display a failure notification if there is an error.
      *
      * @param id - The `id` parameter function is used to specify the unique
      * identifier of the bachelor program that you want to fetch from the backend API.
@@ -129,13 +142,13 @@ class BackendRequest {
             return bachelorData;
         } catch (error) {
             Notification.failed("Impossible de récupérer les informations sur le bachelor");
-            console.log(error);
             throw error;
         }
     }
 
     /**
      * Uses axios to fetch all teachers data from a specified API endpoint asynchronously.
+     * Display a failure notification if there is an error.
      *
      * @returns Return a promise that resolves to the result of the axios GET request to
      * the specified API endpoint for fetching all teachers.
@@ -149,13 +162,13 @@ class BackendRequest {
         catch (error)
         {
             Notification.failed("Impossible de récupérer la liste des enseignants");
-            console.log(error);
             throw error;
         }
     }
 
     /**
      * Uses axios to fetch a teacher data by its ID from a specified API endpoint asynchronously.
+     * Display a failure notification if there is an error.
      *
      * @param id - The `id` parameter is used to specify the unique identifier of the teacher
      * whose information you want to fetch from the backend API.
@@ -171,7 +184,6 @@ class BackendRequest {
         catch (error)
         {
             Notification.failed("Impossible de récupérer l'enseignant'");
-            console.log(error);
             throw error;
         }
     }
@@ -193,6 +205,7 @@ class BackendRequest {
 
     /**
      * Uses axios to send a POST request to a specified API endpoint to create a new bachelor record asynchronously.
+     * Displays a success notification if successful, or a failure notification if there is an error.
      *
      * @param data - The `data` parameter is the information that you want to send in the POST
      * request to the specified API endpoint.
@@ -212,49 +225,82 @@ class BackendRequest {
         catch (error)
         {
             Notification.failed("Impossible d'ajouter le nouveau bachelor");
-            console.log(error);
-            throw error;
-        }
-    }
-
-    static async addBachelorToStudentSelection(idStudent, idBachelor)
-    {
-        try
-        {
-            return await axios.post(`${(BackendRequest.API_LINK)}api/student/${idStudent}/add_bachelor/`,
-            {
-              bachelor_id: idBachelor,
-            });
-        }
-        catch (error)
-        {
-            Notification.failed("Impossible d'ajouter le bachelor à votre sélection");
-            console.log(error);
-            throw error;
-        }
-    }
-
-    static async removeBachelorToStudentSelection(idStudent, idBachelor)
-    {
-        try
-        {
-            return await axios.delete(`${(BackendRequest.API_LINK)}api/student/${idStudent}/remove_bachelor/`, {
-                data:
-                    {
-                        bachelor_id: idBachelor
-                    }
-            });
-        }
-        catch (error)
-        {
-            Notification.failed("Impossible de retirer le bachelor de votre sélection");
-            console.log(error);
             throw error;
         }
     }
 
     /**
-     * Uses axios to send a PUT request to a specific API endpoint to update a bachelor record
+     * Uses axios to add a bachelor to a student's selection and displays a success notification if
+     * successful, or a failure notification if there is an error.
+     *
+     * @param idStudent - The `idStudent` parameter represents the unique identifier of the student to
+     * whom the bachelor program will be added in their selection.
+     * @param idBachelor - The `idBachelor` parameter is the unique identifier of the bachelor program
+     * that you want to add to the student's selection.
+     * @param nameBachelor - The `nameBachelor` parameter represents the name of the bachelor that is
+     * being added to the student's selection.
+     * @returns Return the result of the axios POST request, which is stored in the `res` variable.
+     */
+    static async addBachelorToStudentSelection(idStudent, idBachelor, nameBachelor)
+    {
+        try
+        {
+            const res = await axios.post(`${(BackendRequest.API_LINK)}api/student/${idStudent}/add_bachelor/`,
+            {
+              bachelor_id: idBachelor,
+            });
+
+            Notification.success(`Bachelor <em>${nameBachelor}</em> ajouté dans votre sélection de bachelor !`);
+
+            return res;
+        }
+        catch (error)
+        {
+            Notification.failed("Impossible d'ajouter le bachelor à votre sélection");
+            throw error;
+        }
+    }
+
+    /**
+     * Uses axios to remove a bachelor from a student's selection by sending a DELETE
+     * request to the backend API.
+     * Display a success notification if successful, or a failure notification if there is an error.
+     *
+     * @param idStudent - The `idStudent` parameter is the unique identifier of the student whose
+     * bachelor selection needs to be updated.
+     * @param idBachelor - The `idBachelor` parameter represents the unique identifier of the bachelor
+     * program that you want to remove from the student's selection.
+     * @param nameBachelor - The `nameBachelor` parameter represents the name of the bachelor that is
+     * being removed from the student's selection.
+     * It is used to display a notification message informing the user that the specified bachelor has
+     * been successfully removed from their selection.
+     * @returns Return the response object `res` after making a DELETE request to the specified API endpoint.
+     */
+    static async removeBachelorToStudentSelection(idStudent, idBachelor, nameBachelor)
+    {
+        try
+        {
+            const res = await axios.delete(`${(BackendRequest.API_LINK)}api/student/${idStudent}/remove_bachelor/`, {
+                data:
+                    {
+                        bachelor_id: idBachelor
+                    }
+            });
+
+            Notification.success(`Bachelor <em>${nameBachelor}</em> retiré dans votre sélection de bachelor !`);
+
+            return res;
+        }
+        catch (error)
+        {
+            Notification.failed("Impossible de retirer le bachelor de votre sélection");
+            throw error;
+        }
+    }
+
+    /**
+     * Uses axios to send a PUT request to a specific API endpoint to update a bachelor record.
+     * Displays a success notification if successful, or a failure notification if there is an error.
      *
      * @param id - The `id` parameter is the identifier of the bachelor record that you want to update.
      * It is used to specify which bachelor record should be updated in the database.
@@ -267,35 +313,42 @@ class BackendRequest {
     {
         try
         {
-            return await axios.put(BackendRequest.API_LINK + "api/bachelor/" + id + "/", data);
+            const res = await axios.put(BackendRequest.API_LINK + "api/bachelor/" + id + "/", data);
+
+            Notification.success("Modification effectuée avec succès !");
+
+            return res;
         }
         catch (error)
         {
             Notification.failed("Impossible de modifier le bachelor");
-            console.log(error);
             throw error;
         }
     }
 
     /**
-     * Uses axios to send a DELETE request to a specific API endpoint for
-     * deleting a bachelor record by ID.
+     * Uses axios to send a DELETE request to a specific API endpoint for deleting a bachelor record by ID.
+     * Display a success notification if successful, or a failure notification if there is an error.
      *
      * @param id - The `id` parameter is the unique identifier of the
      * bachelor record that you want to delete from the backend server.
+     * @param nameBachelor - The `nameBachelor` corresponding to the name of the bachelor that is display on the notification
      * @returns Return the result of the axios delete request to the
      * specified API endpoint for deleting a bachelor record with the given `id`.
      */
-    static async deleteBachelor(id)
+    static async deleteBachelor(id, nameBachelor)
     {
         try
         {
-            return await axios.delete(`${(BackendRequest.API_LINK)}api/bachelor/${id}/`);
+            const res = await axios.delete(`${(BackendRequest.API_LINK)}api/bachelor/${id}/`);
+
+            Notification.success(`Le bachelor <em>${nameBachelor}</em> a bien été supprimé !`);
+
+            return res;
         }
         catch (error)
         {
             Notification.failed("Impossible de supprimer le bachelor");
-            console.log(error);
             throw error;
         }
     }

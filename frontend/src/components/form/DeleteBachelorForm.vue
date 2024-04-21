@@ -1,7 +1,6 @@
 <script setup>
 
 import {defineEmits, defineProps, ref, watch} from "vue";
-import {useQuasar} from "quasar";
 
 import Title from "@/components/Title.vue";
 import PrimaryButton from "@/components/PrimaryButton.vue";
@@ -64,20 +63,10 @@ const fetchBachelor = async () => {
 const deleteItem = async () => {
   if (props.itemDeleteId)
   {
-    await BackendRequest.deleteBachelor(props.itemDeleteId);
-
-    showNotif();
+    await BackendRequest.deleteBachelor(props.itemDeleteId, bachelor.value.name);
     closeDialog();
   }
 };
-
-const $q = useQuasar();
-const showNotif = () => {
-  $q.notify({
-    type: 'positive',
-    message: `Le bachelor <em>${bachelor.value.name}</em> a bien été supprimé !`,
-  })
-}
 
 </script>
 
