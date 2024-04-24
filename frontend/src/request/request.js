@@ -352,6 +352,29 @@ class BackendRequest {
             throw error;
         }
     }
+
+    static async register(data)
+    {
+        try
+        {
+            switch (data.user_type)
+            {
+                case "student":
+
+                    await axios.post(`${BackendRequest.API_LINK}api/student/`, data);
+                    break;
+                case "teacher":
+                    await axios.post(`${BackendRequest.API_LINK}api/teacher/`, data);
+                    break;
+            }
+
+            Notification.success("Inscription réussie !");
+        }
+        catch (error)
+        {
+            Notification.failed("Inscription impossible");
+        }
+    }
 }
 
 export default BackendRequest;

@@ -65,6 +65,7 @@ const router = createRouter({
     },
     {
       path: '/404',
+      name: 'not-found',
       component: NotFoundView
     },
     {
