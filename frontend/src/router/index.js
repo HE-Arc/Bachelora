@@ -7,6 +7,7 @@ import CreateBachelorView from "@/views/CreateBachelorView.vue";
 import BachelorView from "@/views/BachelorView.vue";
 import EditBachelorView from "@/views/EditBachelorView.vue";
 import NotFoundView from "@/views/NotFoundView.vue";
+import ChosenBachelorView from "@/views/ChosenBachelorView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -59,7 +60,7 @@ const router = createRouter({
     {
       path: '/chosen-bachelors',
       name: 'chosen-bachelors',
-      component: HomeView // TODO ChosenBachelorView
+      component: ChosenBachelorView
     },
     {
       path: '/404',
