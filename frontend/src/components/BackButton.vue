@@ -1,19 +1,23 @@
 <script setup>
 
-const props = defineProps({
-  link : {
-    type: String,
-    required: true
-  }
-})
+import router from "@/router/index.js";
+
+const goBack = () => {
+  router.go(-1);
+};
 
 </script>
 
 <template>
-  <router-link :to="{ name: props.link }" class="backButton">
-      <q-icon name="arrow_back_ios_new" />
+  <q-btn
+      flat
+      icon="arrow_back_ios_new"
+      color="primary"
+      size="md"
+      class="backButton"
+      @click="goBack">
       Retour
-  </router-link>
+  </q-btn>
 </template>
 
 <style scoped lang="scss">

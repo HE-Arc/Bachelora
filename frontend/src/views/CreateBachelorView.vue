@@ -7,7 +7,7 @@ import BackButton from "@/components/BackButton.vue";
 
 <template>
   <section>
-    <BackButton link="bachelors" />
+    <BackButton />
     <Title text="Nouveau travail de bachelor" />
     <CreateBachelorForm />
   </section>
