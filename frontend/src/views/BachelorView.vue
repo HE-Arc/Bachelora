@@ -23,7 +23,7 @@ onMounted(() => {
 
 <template>
   <section>
-    <BackButton link="bachelors" />
+    <BackButton />
 
     <Title :text="bachelor.name"/>
 
