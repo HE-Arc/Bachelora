@@ -4,6 +4,7 @@
 
 import axios from "axios";
 import Notification from "@/notifications/notifications.js";
+import router from "@/router/index.js";
 
 class BackendRequest {
     static API_LINK = import.meta.env.VITE_API_LINK;
@@ -355,24 +356,39 @@ class BackendRequest {
 
     static async register(data)
     {
+        let success = false;
         try
         {
             switch (data.user_type)
             {
                 case "student":
-
                     await axios.post(`${BackendRequest.API_LINK}api/student/`, data);
                     break;
                 case "teacher":
                     await axios.post(`${BackendRequest.API_LINK}api/teacher/`, data);
                     break;
             }
-
+            success = true;
             Notification.success("Inscription réussie !");
+            return success;
         }
         catch (error)
         {
-            Notification.failed("Inscription impossible");
+            if(error.response.status === 400)
+            {
+                for(const e in error.response.data)
+                {
+                    Notification.warning(error.response.data[e]);
+                }
+            }
+            else
+            {
+                Notification.failed("Inscription impossible");
+                throw error;
+            }
+
+            success = false;
+            return success;
         }
     }
 }

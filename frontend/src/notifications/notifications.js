@@ -3,6 +3,7 @@ import { Notify } from 'quasar'
 
 export default class Notification {
     static noTimeout = 0;
+    static waringTimeout = 5000;
 
     static SERVER_FAILED = "Une erreur s'est produite au niveau du serveur. Veuillez réessayer.";
     static CONTACT_ADMIN = "Si le problème persistance, veuillez<a class='message-alert' href='mailto:stephane.oguey@he-arc.ch, loic.santschi@he-arc.ch, miranda.fleury@he-arc.ch?subject=Bachelora - Erreur'>contacter les administrateurs</a>.";
@@ -37,7 +38,7 @@ export default class Notification {
     }
 
     static warning = (message) => {
-        this.showNotification(message, 'warning', this.noTimeout);
+        this.showNotification(message, 'warning', this.waringTimeout);
     }
 
     static information = (message) => {
