@@ -4,7 +4,6 @@
 
 import axios from "axios";
 import Notification from "@/notifications/notifications.js";
-import router from "@/router/index.js";
 
 class BackendRequest {
     static API_LINK = import.meta.env.VITE_API_LINK;
