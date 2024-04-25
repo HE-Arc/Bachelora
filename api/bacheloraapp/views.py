@@ -1,8 +1,10 @@
 from django.shortcuts import render
+from django.contrib.auth.models import User
 
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.response import Response
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view
+from rest_framework.authtoken.models import Token
 
 from .views import *
 from .serializers import *
@@ -130,3 +132,31 @@ class TeacherViewSet(viewsets.ModelViewSet):
     queryset = Teacher.objects.all()
     serializer_class = TeacherSerializer
     allowed_methods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
+    
+class Authentification():    
+    @api_view(['POST'])
+    def login(request):
+        return Response({})
+
+    @api_view(['POST'])
+    def signup(request):
+        user_type = request.data.get('user_type')
+
+        if user_type == 'student':
+            serializer = StudentSerializer(data=request.data, context={'request': request})
+        elif user_type == 'teacher':
+            serializer = TeacherSerializer(data=request.data, context={'request': request})
+        else:
+            return Response({'error': 'Invalid user_type'}, status=status.HTTP_400_BAD_REQUEST)
+            
+        if serializer.is_valid():
+            serializer.save()
+            user = serializer.instance
+            token = Token.objects.create(user=user)
+            return Response({"token": token.key, "user": serializer.data}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+    @api_view(['GET'])
+    def test_token(request):
+        return Response({})

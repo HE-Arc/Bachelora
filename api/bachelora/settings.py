@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bacheloraapp',
     'rest_framework',
+    'rest_framework.authtoken',
     'corsheaders'
 ]
 

@@ -12,4 +12,7 @@ router.register(r'teacher', views.TeacherViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('login', views.Authentification.login),
+    path('signup', views.Authentification.signup),
+    path('test_token', views.Authentification.test_token),
 ]
