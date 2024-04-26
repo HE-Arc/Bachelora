@@ -70,6 +70,7 @@ const onSubmit = async() => {
     });
 
     await router.push("/bachelors/" + response.data.id);
+    await router.go(0);
 }
 
 const requiredField = (val) => {
