@@ -370,16 +370,8 @@ class BackendRequest {
     {
         try
         {
-            switch (data.user_type)
-            {
-                case "student":
-                    await axios.post(`${BackendRequest.API_LINK}api/student/`, data);
-                    break;
-                case "teacher":
-                    await axios.post(`${BackendRequest.API_LINK}api/teacher/`, data);
-                    break;
-            }
-
+            const res = await axios.post(`${this.API_LINK}api/signup`, data);
+            Cookie.create(res.data.user, res.data.token);
             Notification.success("Inscription réussie !");
             return true;
         }
