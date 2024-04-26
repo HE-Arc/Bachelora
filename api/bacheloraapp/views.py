@@ -141,15 +141,25 @@ class Authentification():
     def login(request):
         user = get_object_or_404(CustomUser, username=request.data['username'])
         
-        if not user.check_password(request.data['password']):
-            return Response({"detail": "Wrong user or password."}, status=status.HTTP_404_NOT_FOUND)
-        token, created = Token.objects.get_or_create(user=user)
         
-        return Response({"token": token.key, "user": request.data['username']})
-
+        
+        if not user.check_password(request.data['password']):
+            return Response({"detail": "Wrong user or password."}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        token, created = Token.objects.get_or_create(user=user)
+        user.set_password('???')
+        
+        user_serializer = Authentification.get_serializer(user, request)
+        if user_serializer is None:
+            return Response({"Detail": "Internal error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        return Response({"token": token.key, "user": user_serializer.data})
+        
     @api_view(['POST'])
     def signup(request):
-        user_type = request.data.get('user_type')
+        user_type = request.data['user_type']
+        password = request.data['password']
+        request.data['password'] = '???'
 
         if user_type == 'student':
             serializer = StudentSerializer(data=request.data, context={'request': request})
@@ -161,10 +171,15 @@ class Authentification():
         if serializer.is_valid():
             serializer.save()
             user = User.objects.get(username=request.data['username'])
-            user.set_password(request.data['password'])
+            user.set_password(password)
             user.save()
             token = Token.objects.create(user=user)
-            return Response({"token": token.key, "user": serializer.data}, status=status.HTTP_201_CREATED)
+            
+            user_serializer = Authentification.get_serializer(user, request)
+            if user_serializer is None:
+                return Response({"Detail": "Internal error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
+            return Response({"token": token.key, "user": user_serializer.data}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @api_view(['GET'])
@@ -172,3 +187,15 @@ class Authentification():
     @permission_classes([IsAuthenticated])
     def test_token(request):
         return Response("Valid token", status=status.HTTP_200_OK)
+    
+    def get_serializer(user, request):
+        user_type = user.user_type
+        
+        if user_type == 'student':
+            student = get_object_or_404(Student, username=user.get_username())
+            return StudentSerializer(instance=student, context={'request': request})
+        elif user_type == 'teacher':
+            teacher = get_object_or_404(Teacher, username=user.get_username())
+            return TeacherSerializer(instance=teacher, context={'request': request})
+        else:
+            return None
