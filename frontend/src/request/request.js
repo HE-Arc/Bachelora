@@ -4,6 +4,7 @@
 
 import axios from "axios";
 import Notification from "@/notifications/notifications.js";
+import router from "@/router/index.js";
 
 class BackendRequest {
     static API_LINK = import.meta.env.VITE_API_LINK;
@@ -366,7 +367,6 @@ class BackendRequest {
      */
     static async register(data)
     {
-        let success = false;
         try
         {
             switch (data.user_type)
@@ -378,9 +378,9 @@ class BackendRequest {
                     await axios.post(`${BackendRequest.API_LINK}api/teacher/`, data);
                     break;
             }
-            success = true;
+
             Notification.success("Inscription réussie !");
-            return success;
+            return true;
         }
         catch (error)
         {
@@ -397,27 +397,40 @@ class BackendRequest {
                 throw error;
             }
 
-            success = false;
-            return success;
+            return false;
         }
     }
 
     static async login(data)
     {
-        let success = false;
-
         try
         {
             // TODO Call write API route
             console.log(data);
-            success = true;
             Notification.success("Connexion réussie !");
-            return success;
+            return true;
         }
         catch (error)
         {
+            // TODO Check error to display right notification type
             Notification.failed("Connexion impossible");
-            throw error;
+            return false;
+        }
+    }
+
+    static async checkToken(token)
+    {
+        try
+        {
+            // TODO Call the check valid token API route
+            console.log("Valid token" + token);
+            return true;
+        }
+        catch (error)
+        {
+            Notification.warning("Votre session a expiré. Vous êtes redirigé vers la page de connexion");
+            router.push({name: "login"});
+            return false;
         }
     }
 }
