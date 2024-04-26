@@ -5,6 +5,7 @@
 import axios from "axios";
 import Notification from "@/notifications/notifications.js";
 import router from "@/router/index.js";
+import Cookie from "@/cookies/cookies.js";
 
 class BackendRequest {
     static API_LINK = import.meta.env.VITE_API_LINK;
@@ -405,15 +406,25 @@ class BackendRequest {
     {
         try
         {
-            // TODO Call write API route
-            console.log(data);
+            const res = await axios.post(`${this.API_LINK}api/login`, data);
+            Cookie.create(res.data.user, res.data.token);
             Notification.success("Connexion réussie !");
             return true;
         }
         catch (error)
         {
-            // TODO Check error to display right notification type
-            Notification.failed("Connexion impossible");
+            if(error.response.status === 404)
+            {
+                Notification.warning("Utilisateur introuvable.");
+            }
+            else if(error.response.status === 401)
+            {
+                Notification.warning("Nom d'utilisateur ou mot de passe incorrect.");
+            }
+            else
+            {
+                Notification.failed("Connexion impossible");
+            }
             return false;
         }
     }
@@ -430,6 +441,20 @@ class BackendRequest {
         {
             Notification.warning("Votre session a expiré. Vous êtes redirigé vers la page de connexion");
             router.push({name: "login"});
+            return false;
+        }
+    }
+
+    static logout()
+    {
+        if(Cookie.delete())
+        {
+            Notification.success("Déconnexion réussie !");
+            return true;
+        }
+        else
+        {
+            Notification.failed("Déconnexion impossible");
             return false;
         }
     }

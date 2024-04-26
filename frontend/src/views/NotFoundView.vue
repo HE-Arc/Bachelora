@@ -58,10 +58,6 @@ import PrimaryButton from "@/components/PrimaryButton.vue";
     display: none;
   }
 
-  .attribution {
-    font-size: 0.5rem;
-  }
-
   @media only screen and (min-width: 1024px) {
     .home {
       max-width: 50%;
