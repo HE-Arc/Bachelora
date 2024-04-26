@@ -1,7 +1,7 @@
 POST http://127.0.0.1:8000/api/signup 
 Content-Type: application/json
 
-{ "username": "aaa2", "password": "aaa", "email": "john.doe@example.com", "first_name": "John", "last_name": "Doe", "user_type": "student", "orientation": 1 }
+{ "email": "john.doe@example.com", "first_name": "John", "last_name": "Doe" }
 
 ###
 

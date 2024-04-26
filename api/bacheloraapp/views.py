@@ -141,13 +141,10 @@ class Authentification():
     def login(request):
         user = get_object_or_404(CustomUser, username=request.data['username'])
         
-        
-        
         if not user.check_password(request.data['password']):
             return Response({"detail": "Wrong user or password."}, status=status.HTTP_401_UNAUTHORIZED)
         
         token, created = Token.objects.get_or_create(user=user)
-        user.set_password('???')
         
         user_serializer = Authentification.get_serializer(user, request)
         if user_serializer is None:
@@ -157,9 +154,15 @@ class Authentification():
         
     @api_view(['POST'])
     def signup(request):
-        user_type = request.data['user_type']
-        password = request.data['password']
-        request.data['password'] = '???'
+        
+        user_type = None
+        
+        if 'user_type' in request.data:
+            user_type = request.data['user_type']
+        
+        if 'password' in request.data: 
+            password = request.data['password']
+            request.data['password'] = '???'
 
         if user_type == 'student':
             serializer = StudentSerializer(data=request.data, context={'request': request})
