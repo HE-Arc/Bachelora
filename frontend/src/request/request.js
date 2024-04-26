@@ -353,6 +353,17 @@ class BackendRequest {
         }
     }
 
+    /**
+     * Uses axios to user registration based on their user type, sends a POST request to the appropriate API endpoint,
+     * and displays success or error notifications accordingly.
+     *
+     * @param data - The `data` object likely contains information about a user being
+     * registered, such as their user type (student or teacher) and other relevant details needed for
+     * registration.
+     * @returns Return a boolean value indicating the success of the
+     * registration process. It returns `true` if the registration is successful and `false` if there
+     * is an error during the process.
+     */
     static async register(data)
     {
         let success = false;
