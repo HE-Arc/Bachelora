@@ -35,12 +35,6 @@
       separator: true
     },
     {
-      icon: 'person',
-      name: 'account',
-      label: 'Mon compte',
-      separator: false
-    },
-    {
       icon: 'logout',
       name: 'logout',
       label: 'Déconnexion',

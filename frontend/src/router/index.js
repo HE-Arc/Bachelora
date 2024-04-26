@@ -34,11 +34,6 @@ const router = createRouter({
       component: LogoutView
     },
     {
-      path: '/account',
-      name: 'account',
-      component: HomeView // TODO AccountView
-    },
-    {
       path: '/bachelors',
       name: 'bachelors',
       component: BachelorsView
