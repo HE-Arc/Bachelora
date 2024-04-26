@@ -1,7 +1,7 @@
 
 import './styles/quasar.scss'
 import '@quasar/extras/material-icons/material-icons.css'
-import {Notify} from "quasar";
+import {Cookies, Notify} from "quasar";
 
 // To be used on app.use(Quasar, { ... })
 export default {
@@ -30,5 +30,6 @@ export default {
   },
   plugins: {
       Notify,
+      Cookies
   },
 }
