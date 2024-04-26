@@ -23,12 +23,7 @@
       password: password.value
     };
 
-    const response = await BackendRequest.login(person);
-
-    if(response === true)
-    {
-      router.push({name: 'bachelors'});
-    }
+    await BackendRequest.login(person);
   }
 </script>
 

@@ -85,6 +85,7 @@ class BackendRequest {
     {
         try
         {
+            await this.checkToken();
             const res = await axios.get(`${(BackendRequest.API_LINK)}api/bachelor/`);
             return res.data.sort((a, b) => b.id - a.id);
         }
@@ -108,6 +109,7 @@ class BackendRequest {
     {
         try
         {
+            await this.checkToken();
             return await axios.get(`${(this.API_LINK)}api/student/${id}/`);
         }
         catch (error)
@@ -128,6 +130,7 @@ class BackendRequest {
     static async fetchBachelorById(id)
     {
         try {
+            await this.checkToken();
             const response = await axios.get(`${BackendRequest.API_LINK}api/bachelor/${id}/`);
             const bachelorData = response.data;
 
@@ -159,6 +162,7 @@ class BackendRequest {
     {
         try
         {
+            await this.checkToken();
             return await axios.get(BackendRequest.API_LINK + "api/teacher/");
         }
         catch (error)
@@ -181,6 +185,7 @@ class BackendRequest {
     {
         try
         {
+            await this.checkToken();
             return await axios.get(`${BackendRequest.API_LINK}api/teacher/${id}/`);
         }
         catch (error)
@@ -201,6 +206,7 @@ class BackendRequest {
      */
     static async getTeacherName(id)
     {
+        await this.checkToken();
         const res = await BackendRequest.fetchTeacherById(id);
         return res.data.first_name + " " + res.data.last_name;
     }
@@ -218,6 +224,7 @@ class BackendRequest {
     {
         try
         {
+            await this.checkToken();
             const res = await axios.post(BackendRequest.API_LINK + "api/bachelor/", data);
 
             Notification.success("Nouveau bachelor ajouté !");
@@ -247,6 +254,7 @@ class BackendRequest {
     {
         try
         {
+            await this.checkToken();
             const res = await axios.post(`${(BackendRequest.API_LINK)}api/student/${idStudent}/add_bachelor/`,
             {
               bachelor_id: idBachelor,
@@ -282,6 +290,7 @@ class BackendRequest {
     {
         try
         {
+            await this.checkToken();
             const res = await axios.delete(`${(BackendRequest.API_LINK)}api/student/${idStudent}/remove_bachelor/`, {
                 data:
                     {
@@ -315,6 +324,7 @@ class BackendRequest {
     {
         try
         {
+            await this.checkToken();
             const res = await axios.put(BackendRequest.API_LINK + "api/bachelor/" + id + "/", data);
 
             Notification.success("Modification effectuée avec succès !");
@@ -342,6 +352,7 @@ class BackendRequest {
     {
         try
         {
+            await this.checkToken();
             const res = await axios.delete(`${(BackendRequest.API_LINK)}api/bachelor/${id}/`);
 
             Notification.success(`Le bachelor <em>${nameBachelor}</em> a bien été supprimé !`);
@@ -401,7 +412,7 @@ class BackendRequest {
             const res = await axios.post(`${this.API_LINK}api/login`, data);
             Cookie.create(res.data.user, res.data.token);
             Notification.success("Connexion réussie !");
-            return true;
+            router.push({name: 'bachelors'});
         }
         catch (error)
         {
@@ -417,22 +428,28 @@ class BackendRequest {
             {
                 Notification.failed("Connexion impossible");
             }
-            return false;
         }
     }
 
-    static async checkToken(token)
+    static async checkToken()
     {
         try
         {
-            // TODO Call the check valid token API route
-            console.log("Valid token" + token);
+            await axios.get(`${this.API_LINK}api/test_token`, {
+               headers: {
+                   'Authorization': 'token ' + Cookie.getToken()
+               }
+            });
+
+            console.log("Valid");
             return true;
         }
         catch (error)
         {
-            Notification.warning("Votre session a expiré. Vous êtes redirigé vers la page de connexion");
-            router.push({name: "login"});
+            if (error.response.status === 403)
+            {
+                router.push({name: "login", query: { reconnect: true }});
+            }
             return false;
         }
     }
