@@ -3,7 +3,6 @@
   import PrimaryButton from "@/components/PrimaryButton.vue";
   import BackendRequest from "@/request/request.js";
   import router from "@/router/index.js";
-  import Cookie from "@/cookies/cookies.js";
 
 
   const username = ref('');
@@ -28,12 +27,7 @@
 
     if(response === true)
     {
-      Cookie.create();
-      const token = Cookie.getToken();
-      const user = Cookie.getUser();
-      console.log(token);
-      console.log(user);
-      //router.push({name: 'bachelors'});
+      router.push({name: 'bachelors'});
     }
   }
 </script>
