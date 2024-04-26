@@ -1,8 +1,10 @@
 <script setup>
   import { ref } from 'vue'
   import PrimaryButton from "@/components/PrimaryButton.vue";
+  import BackendRequest from "@/request/request.js";
+  import router from "@/router/index.js";
 
-  const email = ref('');
+  const username = ref('');
   const password = ref('');
   const showPassword = ref(true)
 
@@ -14,16 +16,18 @@
         })
   };
 
-  const success = ref(false);
   const onSubmit = async() => {
-      try {
-        success.value = false;
+    const person = {
+      username: username.value,
+      password: password.value
+    };
 
-        // TODO call route
-        //success.value = true;
-      } catch (e) {
-        console.log(e);
-      }
+    const response = await BackendRequest.login(person);
+
+    if(response === true)
+    {
+      router.push({name: 'bachelors'});
+    }
   }
 </script>
 
@@ -35,13 +39,14 @@
     <ul class="form">
       <li class="form-item">
         <q-input color="primary"
+                 type="text"
                  autofocus
-                 autocomplete="mail"
-                 v-model="email"
-                 label="Adresse e-mail"
+                 autocomplete="username"
+                 v-model="username"
+                 label="Nom d'utilisateur"
                  :rules="[requiredField]">
           <template v-slot:prepend>
-            <q-icon name="mail" />
+            <q-icon name="person" />
           </template>
         </q-input>
       </li>

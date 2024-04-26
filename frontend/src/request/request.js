@@ -401,6 +401,25 @@ class BackendRequest {
             return success;
         }
     }
+
+    static async login(data)
+    {
+        let success = false;
+
+        try
+        {
+            // TODO Call write API route
+            console.log(data);
+            success = true;
+            Notification.success("Connexion réussie !");
+            return success;
+        }
+        catch (error)
+        {
+            Notification.failed("Connexion impossible");
+            throw error;
+        }
+    }
 }
 
 export default BackendRequest;
