@@ -3,6 +3,10 @@
 import Title from "@/components/Title.vue";
 import PrimaryButton from "@/components/PrimaryButton.vue";
 import SecondaryButton from "@/components/SecondaryButton.vue";
+import Cookie from "@/cookies/cookies.js";
+
+Cookie.delete();
+
 </script>
 
 <template>
