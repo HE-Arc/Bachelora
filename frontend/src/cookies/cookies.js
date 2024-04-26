@@ -8,15 +8,8 @@ export default class Cookie {
         path: '/',
         secure: true,
     };
-    static create()
+    static create(user, token)
     {
-        const user = {
-            username: 'Username',
-            userType: 'Student'
-        };
-
-        const token = 'f5AmFPeS2egSMWemWyhFBsaK8PX0BLlZyMkK27yctyDoBd4qM11u4wsDpOEw2sjl';
-
         Cookies.set(this.cookieUser, user, this.cookieOptions);
         Cookies.set(this.cookieToken, token, this.cookieOptions);
     }
@@ -43,14 +36,15 @@ export default class Cookie {
 
     static delete()
     {
-        if (this.hasUserCookie())
+        if (this.hasUserCookie() && this.hasTokenCookie())
         {
             Cookies.remove(this.cookieUser, { path: "/"});
-        }
-
-        if (this.hasTokenCookie())
-        {
             Cookies.remove(this.cookieToken, { path: "/"});
+            return true
+        }
+        else
+        {
+            return false;
         }
     }
 }
