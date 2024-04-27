@@ -11,6 +11,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from .views import *
 from .serializers import *
+from .permissions import *
 
 class BachelorViewSet(viewsets.ModelViewSet):
     """
@@ -19,6 +20,8 @@ class BachelorViewSet(viewsets.ModelViewSet):
     queryset = Bachelor.objects.all()
     serializer_class = BachelorSerializer
     allowed_methods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    permission_classes = [IsAuthenticated, IsTeacherOwnerOrReadOnly]
 
     @action(detail=True, methods=['post'])
     def add_tag(self, request, pk=None):
@@ -83,6 +86,8 @@ class OrientationViewSet(viewsets.ModelViewSet):
     queryset = Orientation.objects.all()
     serializer_class = OrientationSerializer
     allowed_methods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    permission_classes = [IsAuthenticated, IsAdminOrReadOnly]
 
 class TagViewSet(viewsets.ModelViewSet):
     """
@@ -91,6 +96,8 @@ class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     allowed_methods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    permission_classes = [IsAuthenticated, IsAdminOrReadOnly]
 
 class StudentViewSet(viewsets.ModelViewSet):
     """
@@ -98,9 +105,10 @@ class StudentViewSet(viewsets.ModelViewSet):
     """
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
-    allowed_methods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    permission_classes = [IsAuthenticated, ReadOnly]
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated, IsStudentOwnerOrReadOnly])
     def add_bachelor(self, request, pk=None):
         student : Student = self.get_object()
         bachelor_id : Bachelor = request.data.get('bachelor_id')
@@ -114,7 +122,7 @@ class StudentViewSet(viewsets.ModelViewSet):
         else:
             return Response({'error': 'Please provide bachelor_id'}, status=400)
         
-    @action(detail=True, methods=['delete'])
+    @action(detail=True, methods=['delete'], permission_classes=[IsAuthenticated, IsStudentOwnerOrReadOnly])
     def remove_bachelor(self, request, pk=None):
         student : Student = self.get_object()
         bachelor_id : Bachelor = request.data.get('bachelor_id')
@@ -134,7 +142,8 @@ class TeacherViewSet(viewsets.ModelViewSet):
     """
     queryset = Teacher.objects.all()
     serializer_class = TeacherSerializer
-    allowed_methods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    permission_classes = [IsAuthenticated, ReadOnly]
     
 class Authentification():    
     @api_view(['POST'])
