@@ -8,6 +8,7 @@ import BackendRequest from "@/request/request.js";
 import PrimaryButton from "@/components/PrimaryButton.vue";
 import MultiChipsSelect from "@/components/MultiChipsSelect.vue";
 import SecondaryButton from "@/components/SecondaryButton.vue";
+import Cookie from "@/cookies/cookies.js";
 
 
 const title = ref(null);
@@ -64,7 +65,7 @@ const onSubmit = async() => {
     const response = await BackendRequest.createBachelor({
       name: title.value,
       description: description.value,
-      teacher: teacher.value.id,
+      teacher: Cookie.getUser().id,
       orientations: selectedOrientationsID,
       tags: tags.value
     });
@@ -113,20 +114,6 @@ const requiredField = (val) => {
             <q-icon name="subject" />
           </template>
         </q-input>
-      </li>
-
-      <li class="form-item">
-        <q-select v-model="teacher"
-                  :options="teachersItems"
-                  label="Enseignant proposant"
-                  :rules="[requiredField]"
-                  option-value="id"
-                  option-label="fullname"
-        >
-          <template v-slot:prepend>
-            <q-icon name="person" />
-          </template>
-        </q-select>
       </li>
 
       <li class="form-item">
