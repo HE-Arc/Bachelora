@@ -7,6 +7,7 @@ import SecondaryButton from "@/components/SecondaryButton.vue";
 import MultiChipsSelect from "@/components/MultiChipsSelect.vue";
 import DeleteBachelorForm from "@/components/form/DeleteBachelorForm.vue";
 import BackendRequest from '@/request/request.js';
+import Cookie from "@/cookies/cookies.js";
 
 const tagsItems = ref([]);
 const fetchTagsItems = async () => {
@@ -114,7 +115,13 @@ const closeDialog = () => {
   <section>
     <Title text="Liste des travaux de bachelors"/>
 
-    <SecondaryButton class="space center" dashed link="bachelors.create" text="Ajouter un travail de bachelor" icon="add"/>
+    <SecondaryButton
+        v-if="Cookie.getUser()!== null && Cookie.getUser().user_type === 'teacher'"
+        class="space center"
+        dashed
+        link="bachelors.create"
+        text="Ajouter un travail de bachelor"
+        icon="add"/>
 
     <MultiChipsSelect class="space center" icon="filter_alt" label="Tags" :options="tagsItems" @selection-changed="updateBachelorsItems" />
 

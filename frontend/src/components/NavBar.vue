@@ -1,5 +1,9 @@
 <script setup>
-  import {ref} from "vue";
+import {computed, onBeforeUnmount, onMounted, ref} from "vue";
+  import Cookie from "@/cookies/cookies.js";
+  import {ACCESS} from "@/router/access.js";
+
+  import { eventBus } from "@/eventBus.js";
 
   const miniState = ref(true);
   const leftDrawerOpen = ref(false);
@@ -8,39 +12,75 @@
       icon: 'home',
       name: 'home',
       label: 'Accueil',
-      separator: true
+      separator: true,
+      access: ACCESS.ALL
     },
     {
       icon: 'login',
       name: 'login',
       label: 'Connexion',
-      separator: false
+      separator: false,
+      access: ACCESS.NOT_CONNECT
     },
     {
       icon: 'app_registration',
       name: 'register',
       label: 'Inscription',
-      separator: true
+      separator: true,
+      access: ACCESS.NOT_CONNECT
     },
     {
       icon: 'school',
       name: 'bachelors',
       label: 'Liste des travaux de bachelor',
-      separator: false
+      separator: false,
+      access: ACCESS.USERS
     },
     {
       icon: 'star',
       name: 'chosen-bachelors',
       label: 'Ma sélection',
-      separator: true
+      separator: true,
+      access: ACCESS.STUDENT
     },
     {
       icon: 'logout',
       name: 'logout',
       label: 'Déconnexion',
-      separator: false
+      separator: false,
+      access: ACCESS.USERS
     },
   ];
+
+  const access_level = ref([]);
+  const updateAccessLevel = () => {
+    access_level.value = [ACCESS.ALL];
+    if (Cookie.getToken() === null) {
+      access_level.value.push(ACCESS.NOT_CONNECT);
+    } else {
+      access_level.value.push(ACCESS.USERS);
+      if (Cookie.getUser().user_type === "student") {
+        access_level.value.push(ACCESS.STUDENT);
+      }
+    }
+  };
+
+  updateAccessLevel();
+
+  const filteredMenuList = computed(() => {
+    return menuList.filter((item => access_level.value.includes(item.access)));
+  });
+
+  onMounted(() => {
+    eventBus.on("update-access", () => {
+      updateAccessLevel();
+    });
+  });
+
+  onBeforeUnmount(() => {
+    eventBus.off("update-access");
+  });
+
 </script>
 
 <template>
@@ -75,7 +115,7 @@
       <q-list>
         <q-item-label header>Bachelora</q-item-label>
 
-        <template v-for="(menuItem, index) in menuList" :key="index">
+        <template v-for="(menuItem, index) in filteredMenuList" :key="index">
           <router-link :to="{ name: menuItem.name }">
             <q-item clickable :active="$route.name === menuItem.name" :class="{ active : $route.name === menuItem.name }" v-ripple>
               <q-item-section avatar>
