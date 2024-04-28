@@ -2,8 +2,6 @@
   import { ref } from 'vue'
   import PrimaryButton from "@/components/PrimaryButton.vue";
   import BackendRequest from "@/request/request.js";
-  import router from "@/router/index.js";
-
 
   const username = ref('');
   const password = ref('');

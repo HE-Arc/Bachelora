@@ -6,6 +6,7 @@ import axios from "axios";
 import Notification from "@/notifications/notifications.js";
 import router from "@/router/index.js";
 import Cookie from "@/cookies/cookies.js";
+import {eventBus} from "@/eventBus.js";
 
 class BackendRequest {
     static API_LINK = import.meta.env.VITE_API_LINK;
@@ -384,6 +385,9 @@ class BackendRequest {
             const res = await axios.post(`${this.API_LINK}api/signup`, data);
             Cookie.create(res.data.user, res.data.token);
             Notification.success("Inscription réussie !");
+
+            eventBus.emit("update-access", { message: "Mettre à jour le drawer" });
+
             return true;
         }
         catch (error)
@@ -412,6 +416,9 @@ class BackendRequest {
             const res = await axios.post(`${this.API_LINK}api/login`, data);
             Cookie.create(res.data.user, res.data.token);
             Notification.success("Connexion réussie !");
+
+            eventBus.emit("update-access", { message: "Mettre à jour le drawer" });
+
             router.push({name: 'bachelors'});
         }
         catch (error)
@@ -441,7 +448,6 @@ class BackendRequest {
                }
             });
 
-            console.log("Valid");
             return true;
         }
         catch (error)
@@ -459,6 +465,9 @@ class BackendRequest {
         if(Cookie.delete())
         {
             Notification.success("Déconnexion réussie !");
+
+            eventBus.emit("update-access", { message: "Mettre à jour le drawer" });
+
             return true;
         }
         else

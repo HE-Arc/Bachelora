@@ -3,6 +3,7 @@
 import Title from "@/components/Title.vue";
 import DevItem from "@/components/list/DevItem.vue";
 import PrimaryButton from "@/components/PrimaryButton.vue";
+import Cookie from "@/cookies/cookies.js";
 
 const devsTeam = [
   {
@@ -39,7 +40,7 @@ const devsTeam = [
       <div>Favicon made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik"> Freepik </a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com'</a></div>
     </section>
 
-    <section class="btns">
+    <section class="btns" v-if="Cookie.getToken() === null">
       <PrimaryButton link="login" text="Connexion" />
       <PrimaryButton link="register" text="Inscription" />
     </section>
