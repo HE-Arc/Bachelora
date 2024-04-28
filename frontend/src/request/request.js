@@ -301,6 +301,8 @@ class BackendRequest {
 
             Notification.success(`Bachelor <em>${nameBachelor}</em> retiré dans votre sélection de bachelor !`);
 
+            eventBus.emit("update-chosen-bachelor", { message: "Mettre à jour la vue des bachelors sélectionnée."});
+
             return res;
         }
         catch (error)
@@ -368,15 +370,15 @@ class BackendRequest {
     }
 
     /**
-     * Uses axios to user registration based on their user type, sends a POST request to the appropriate API endpoint,
-     * and displays success or error notifications accordingly.
-     *
-     * @param data - The `data` object likely contains information about a user being
-     * registered, such as their user type (student or teacher) and other relevant details needed for
-     * registration.
-     * @returns Return a boolean value indicating the success of the
-     * registration process. It returns `true` if the registration is successful and `false` if there
-     * is an error during the process.
+     * Uses axios to send a POST request to a signup API endpoint asynchronously, handles
+     * successful registration by creating a cookie and displaying a success notification, and handles
+     * errors by displaying appropriate notifications and emitting an event to update access.
+     * 
+     * @param data - The `data` parameter is the information needed to
+     * register a user, such as their username, email, password, etc. This data will be sent in the
+     * POST request to the API endpoint for user registration.
+     * @returns Return a boolean value. If the registration is successful,
+     * it returns `true`. If there is an error during registration, it returns `false`.
      */
     static async register(data)
     {
@@ -409,6 +411,13 @@ class BackendRequest {
         }
     }
 
+    /**
+     * Uses axios to send a POSTT request to login user login to a specific API endpoint asynchronously, 
+     * handling different response statuses, and performing actions based on the response.
+     * 
+     * @param data - The `data` parameter contains the user credentials
+     * needed for logging in, such as the username and password.
+     */
     static async login(data)
     {
         try
@@ -438,6 +447,14 @@ class BackendRequest {
         }
     }
 
+    /**
+     * Uses axios to checks the validity of a token by making a request to a specific API endpoint asynchronously
+     * and handles the response accordingly.
+     * 
+     * @returns Return `true` if the token is valid and the request to the API endpoint. It returns `false` if
+     * there is an error, specifically if the response status is 403 (Forbidden), in which case it also
+     * redirects the user to the login page with a query parameter `reconnect: true`.
+     */
     static async checkToken()
     {
         try
@@ -459,7 +476,15 @@ class BackendRequest {
             return false;
         }
     }
-
+    
+    /**
+     * Logs the user out by deleting a cookie, displaying a success notification,
+     * emitting an event to update access, and returning true if successful, otherwise displaying a
+     * failure notification and returning false.
+     * 
+     * @returns Return a boolean value - `true` if the cookie is successfully
+     * deleted and `false` if the deletion fails.
+     */
     static logout()
     {
         if(Cookie.delete())
