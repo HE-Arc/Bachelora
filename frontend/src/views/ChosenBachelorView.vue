@@ -3,9 +3,10 @@
   import Title from "@/components/Title.vue";
   import BachelorCard from "@/components/card/BachelorCard.vue";
   import BackendRequest from "@/request/request.js";
-  import {onMounted, ref} from "vue";
+  import {onBeforeUnmount, onMounted, ref} from "vue";
   import Cookie from "@/cookies/cookies.js";
   import router from "@/router/index.js";
+  import {eventBus} from "@/eventBus.js";
 
   const choosen_bachelor = ref([]);
 
@@ -15,6 +16,7 @@
   else
   {
       const fetchSelectBachelor = async() => {
+        choosen_bachelor.value = [];
         const res = await BackendRequest.fetchAllBachelorsFromStudentById(Cookie.getUser().id);
 
         for (const id of res.data.bachelors) {
@@ -24,7 +26,14 @@
       };
 
       onMounted(() => {
-      fetchSelectBachelor();
+        fetchSelectBachelor();
+        eventBus.on("update-chosen-bachelor", () => {
+          fetchSelectBachelor();
+        });
+      });
+
+      onBeforeUnmount(() => {
+        eventBus.off("update-chosen-bachelor");
       });
   }
 
