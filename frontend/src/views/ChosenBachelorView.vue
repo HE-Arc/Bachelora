@@ -4,21 +4,29 @@
   import BachelorCard from "@/components/card/BachelorCard.vue";
   import BackendRequest from "@/request/request.js";
   import {onMounted, ref} from "vue";
+  import Cookie from "@/cookies/cookies.js";
+  import router from "@/router/index.js";
 
   const choosen_bachelor = ref([]);
-  const fetchSelectBachelor = async() => {
-    // TODO Adding student id
-    const res = await BackendRequest.fetchAllBachelorsFromStudentById(4);
 
-    for (const id of res.data.bachelors) {
-      const bachelor = await BackendRequest.fetchBachelorById(id);
-      choosen_bachelor.value.push(bachelor);
-    }
-  };
+  if(Cookie.getUser() === null) {
+    router.push({name: "login", query: { reconnect: true }});
+  }
+  else
+  {
+      const fetchSelectBachelor = async() => {
+        const res = await BackendRequest.fetchAllBachelorsFromStudentById(Cookie.getUser().id);
 
-  onMounted(() => {
-    fetchSelectBachelor();
-  });
+        for (const id of res.data.bachelors) {
+          const bachelor = await BackendRequest.fetchBachelorById(id);
+          choosen_bachelor.value.push(bachelor);
+        }
+      };
+
+      onMounted(() => {
+      fetchSelectBachelor();
+      });
+  }
 
 </script>
 

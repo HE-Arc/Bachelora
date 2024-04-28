@@ -3,6 +3,7 @@
   import {ref, defineProps, onMounted } from "vue";
   import router from "@/router/index.js";
   import BackendRequest from "@/request/request.js";
+  import Cookie from "@/cookies/cookies.js";
 
   const props = defineProps({
     bachelor: {
@@ -10,6 +11,8 @@
       required: true
     },
   });
+
+  const idUser = Cookie.getUser().id;
 
   const tagsItems = ref([]);
   const fetchTagsItems = async () => {
@@ -24,19 +27,6 @@
     teacherName.value = await BackendRequest.getTeacherName(props.bachelor.teacher);
   };
 
-  const choosen_bachelor = ref([]);
-  const fetchSelectBachelor = async() => {
-  // TODO Adding student id
-    const res = await BackendRequest.fetchAllBachelorsFromStudentById(4);
-    choosen_bachelor.value = res.data.bachelors;
-  };
-
-  onMounted(() => {
-    fetchTagsItems();
-    fetchTeacher();
-    fetchSelectBachelor();
-  });
-
   const showDetail = async () => {
     await router.push({
           name: 'bachelors.detail',
@@ -45,26 +35,38 @@
   }
 
   // Teacher configuration
-  // TODO Get user id and if teacher enable to edit / delete his bachelors
-  const id_teacher = ref(1);
+  const id_teacher = ref(idUser);
   const emit = defineEmits(['getItemDeleteId']);
   const getItemDeleteId = () => emit('getItemDeleteId', props.bachelor.id);
 
   // Student configuration
-  // TODO Get user type
-  const is_student = ref(false);
+  const is_student = ref(Cookie.getUser().user_type === 'student');
 
   const addToSelection = async () => {
-    // TODO Adding student id
-    await BackendRequest.addBachelorToStudentSelection(4, props.bachelor.id, props.bachelor.name);
+    await BackendRequest.addBachelorToStudentSelection(idUser, props.bachelor.id, props.bachelor.name);
     await fetchSelectBachelor();
   };
 
   const removeFromSelection = async () => {
-      // TODO Adding student id
-      await BackendRequest.removeBachelorToStudentSelection(4, props.bachelor.id, props.bachelor.name);
+      await BackendRequest.removeBachelorToStudentSelection(idUser, props.bachelor.id, props.bachelor.name);
       await fetchSelectBachelor();
   }
+
+  const choosen_bachelor = ref([]);
+  const fetchSelectBachelor = async() => {
+    const res = await BackendRequest.fetchAllBachelorsFromStudentById(idUser);
+    choosen_bachelor.value = res.data.bachelors;
+  };
+
+  onMounted(() => {
+    fetchTagsItems();
+    fetchTeacher();
+
+    if(Cookie.getUser().user_type === 'student')
+    {
+      fetchSelectBachelor();
+    }
+  });
 
 </script>
 
