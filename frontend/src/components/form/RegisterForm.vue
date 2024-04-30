@@ -4,8 +4,6 @@
   import { onMounted, ref} from "vue";
   import BackendRequest from "@/request/request.js";
   import router from "@/router/index.js";
-  import MultiChipsSelect from "@/components/MultiChipsSelect.vue";
-  import SecondaryButton from "@/components/SecondaryButton.vue";
 
   const username = ref('');
   const lastname = ref('');
@@ -123,6 +121,7 @@ const matchesPassword = (val) => {
           <q-input color="primary"
                    v-model="email"
                    label="Adresse e-mail"
+                   autocomplete="email"
                    type="email"
                    :rules="[requiredField]">
             <template v-slot:prepend>
@@ -199,6 +198,12 @@ const matchesPassword = (val) => {
 
         <li class="form-item btns">
           <PrimaryButton class="btn-action" text="Inscription" type="submit"/>
+        </li>
+
+        <li class="form-item">
+          <p class="text-center">Déjà un compte !
+            <router-link class="text-secondary text-bold" :to="{ name : 'login' }">Connectez-vous !</router-link>
+          </p>
         </li>
       </ul>
     </q-form>
