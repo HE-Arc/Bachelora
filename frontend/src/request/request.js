@@ -8,8 +8,68 @@ import router from "@/router/index.js";
 import Cookie from "@/cookies/cookies.js";
 import {eventBus} from "@/eventBus.js";
 
+export const SRV_STATUS = {
+    SUCCESS: 200,
+    BAD_REQUEST: 400,
+    UNAUTHORIZED: 401,
+    FORBIDDEN: 403,
+    NOT_FOUND: 404,
+    TOO_MANY_REQUESTS: 429,
+    INTERNAL_ERROR: 500
+}
+
+
+// Documentation : https://axios-http.com/docs/interceptors
+
+axios.defaults.headers.common['Authorization'] = 'token ' + Cookie.getToken();
+
+// Interceptor to check authorization
+axios.interceptors.request.use(
+    (config) => {
+
+        // URLs don't need token
+        const nonAuthRoutes = ['/register', '/login','/api/signup', '/api/login',];
+
+        // Request without authorization needed
+        if (nonAuthRoutes.some((route) => config.url.includes(route))) {
+          return config;
+        }
+
+        // Check token: If doesn't exist, redirect to login page
+        const token = Cookie.getToken();
+        if (!token) {
+            router.push({ name: 'login', query: { reconnect: true } });
+            throw new Error("Token not found");
+        }
+
+        // Adding token to request if find
+        config.headers['Authorization'] = 'token ' + token;
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    });
+
+// Interceptor to manage responses
+axios.interceptors.response.use(
+    (response) => {
+        return response;
+        },
+    (error) => {
+        return Promise.reject(error);
+    });
+
+
 class BackendRequest {
     static API_LINK = import.meta.env.VITE_API_LINK;
+
+    static errorNotification(error, message)
+    {
+        if(error.response.status !== SRV_STATUS.FORBIDDEN)
+        {
+          Notification.failed(message);
+        }
+    }
 
     /**
      * Uses axios to fetch all orientations data from a specific API endpoint asynchronously.
@@ -26,7 +86,7 @@ class BackendRequest {
         }
         catch (error)
         {
-            Notification.failed("Impossible de récupérer la liste des orientations");
+            this.errorNotification(error, "Impossible de récupérer la liste des orientations");
             throw error;
         }
     }
@@ -46,7 +106,7 @@ class BackendRequest {
         }
         catch (error)
         {
-            Notification.failed("Impossible de récupérer la liste des tags");
+            this.errorNotification(error, "Impossible de récupérer la liste des tags");
             throw error;
         }
     }
@@ -68,7 +128,7 @@ class BackendRequest {
         }
         catch (error)
         {
-            Notification.failed("Impossible de récupérer le tag");
+            this.errorNotification(error, "Impossible de récupérer la liste des orientations", "Impossible de récupérer le tag");
             throw error;
         }
     }
@@ -86,13 +146,12 @@ class BackendRequest {
     {
         try
         {
-            await this.checkToken();
             const res = await axios.get(`${(BackendRequest.API_LINK)}api/bachelor/`);
             return res.data.sort((a, b) => b.id - a.id);
         }
         catch (error)
         {
-            Notification.failed("Impossible de récupérer la liste des bachelors");
+            this.errorNotification(error, "Impossible de récupérer la liste des bachelors");
             throw error;
         }
     }
@@ -110,12 +169,14 @@ class BackendRequest {
     {
         try
         {
-            await this.checkToken();
-            return await axios.get(`${(this.API_LINK)}api/student/${id}/`);
+            const res = await axios.get(`${(this.API_LINK)}api/student/${id}/`);
+            // TODO
+            return res;
+            //return await axios.get(`${(this.API_LINK)}api/student/${id}/`);
         }
         catch (error)
         {
-            Notification.failed("Impossible de récupérer votre sélection de bachelors");
+            this.errorNotification(error, "Impossible de récupérer votre sélection de bachelors");
             throw error;
         }
     }
@@ -131,7 +192,6 @@ class BackendRequest {
     static async fetchBachelorById(id)
     {
         try {
-            await this.checkToken();
             const response = await axios.get(`${BackendRequest.API_LINK}api/bachelor/${id}/`);
             const bachelorData = response.data;
 
@@ -147,7 +207,7 @@ class BackendRequest {
 
             return bachelorData;
         } catch (error) {
-            Notification.failed("Impossible de récupérer les informations sur le bachelor");
+            this.errorNotification(error, "Impossible de récupérer les informations sur le bachelor");
             throw error;
         }
     }
@@ -163,12 +223,11 @@ class BackendRequest {
     {
         try
         {
-            await this.checkToken();
             return await axios.get(BackendRequest.API_LINK + "api/teacher/");
         }
         catch (error)
         {
-            Notification.failed("Impossible de récupérer la liste des enseignants");
+            this.errorNotification(error, "Impossible de récupérer la liste des enseignants");
             throw error;
         }
     }
@@ -186,12 +245,11 @@ class BackendRequest {
     {
         try
         {
-            await this.checkToken();
             return await axios.get(`${BackendRequest.API_LINK}api/teacher/${id}/`);
         }
         catch (error)
         {
-            Notification.failed("Impossible de récupérer l'enseignant'");
+            this.errorNotification(error, "Impossible de récupérer l'enseignant");
             throw error;
         }
     }
@@ -207,7 +265,6 @@ class BackendRequest {
      */
     static async getTeacherName(id)
     {
-        await this.checkToken();
         const res = await BackendRequest.fetchTeacherById(id);
         return res.data.first_name + " " + res.data.last_name;
     }
@@ -225,7 +282,6 @@ class BackendRequest {
     {
         try
         {
-            await this.checkToken();
             const res = await axios.post(BackendRequest.API_LINK + "api/bachelor/", data);
 
             Notification.success("Nouveau bachelor ajouté !");
@@ -234,7 +290,7 @@ class BackendRequest {
         }
         catch (error)
         {
-            Notification.failed("Impossible d'ajouter le nouveau bachelor");
+            this.errorNotification(error, "Impossible d'ajouter le nouveau bachelor");
             throw error;
         }
     }
@@ -255,7 +311,6 @@ class BackendRequest {
     {
         try
         {
-            await this.checkToken();
             const res = await axios.post(`${(BackendRequest.API_LINK)}api/student/${idStudent}/add_bachelor/`,
             {
               bachelor_id: idBachelor,
@@ -267,7 +322,7 @@ class BackendRequest {
         }
         catch (error)
         {
-            Notification.failed("Impossible d'ajouter le bachelor à votre sélection");
+            this.errorNotification(error,"Impossible d'ajouter le bachelor à votre sélection" );
             throw error;
         }
     }
@@ -291,7 +346,6 @@ class BackendRequest {
     {
         try
         {
-            await this.checkToken();
             const res = await axios.delete(`${(BackendRequest.API_LINK)}api/student/${idStudent}/remove_bachelor/`, {
                 data:
                     {
@@ -307,7 +361,7 @@ class BackendRequest {
         }
         catch (error)
         {
-            Notification.failed("Impossible de retirer le bachelor de votre sélection");
+            this.errorNotification(error, "Impossible de retirer le bachelor de votre sélection");
             throw error;
         }
     }
@@ -327,7 +381,6 @@ class BackendRequest {
     {
         try
         {
-            await this.checkToken();
             const res = await axios.put(BackendRequest.API_LINK + "api/bachelor/" + id + "/", data);
 
             Notification.success("Modification effectuée avec succès !");
@@ -336,7 +389,7 @@ class BackendRequest {
         }
         catch (error)
         {
-            Notification.failed("Impossible de modifier le bachelor");
+            this.errorNotification(error, "Impossible de modifier le bachelor");
             throw error;
         }
     }
@@ -355,7 +408,6 @@ class BackendRequest {
     {
         try
         {
-            await this.checkToken();
             const res = await axios.delete(`${(BackendRequest.API_LINK)}api/bachelor/${id}/`);
 
             Notification.success(`Le bachelor <em>${nameBachelor}</em> a bien été supprimé !`);
@@ -364,7 +416,7 @@ class BackendRequest {
         }
         catch (error)
         {
-            Notification.failed("Impossible de supprimer le bachelor");
+            this.errorNotification(error, "Impossible de supprimer le bachelor");
             throw error;
         }
     }
@@ -394,7 +446,7 @@ class BackendRequest {
         }
         catch (error)
         {
-            if(error.response.status === 400)
+            if(error.response.status === SRV_STATUS.BAD_REQUEST)
             {
                 for(const e in error.response.data)
                 {
@@ -403,7 +455,7 @@ class BackendRequest {
             }
             else
             {
-                Notification.failed("Inscription impossible");
+                this.errorNotification(error, "Inscription impossible");
                 throw error;
             }
 
@@ -432,17 +484,17 @@ class BackendRequest {
         }
         catch (error)
         {
-            if(error.response.status === 404)
+            if(error.response.status === SRV_STATUS.NOT_FOUND)
             {
                 Notification.warning("Utilisateur introuvable.");
             }
-            else if(error.response.status === 401)
+            else if(error.response.status === SRV_STATUS.UNAUTHORIZED)
             {
                 Notification.warning("Nom d'utilisateur ou mot de passe incorrect.");
             }
             else
             {
-                Notification.failed("Connexion impossible");
+                this.errorNotification(error, "Connexion impossible");
             }
         }
     }
