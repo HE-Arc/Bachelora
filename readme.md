@@ -112,6 +112,10 @@ From the subfolder `~\Bachelora\api\`, in a terminal, enter the following comman
    ```sh
    pipenv shell
    ```
+> Apply migrations to the database (only if migrations have changed or if it's the first time you clone the project)
+   ```sh
+   python manage.py migrate
+   ```
 
 > Start backend server
    ```sh
@@ -147,6 +151,34 @@ Normalement, la liste des travaux de bachelors s'affiche, les TB sont affichés 
 Pour l'enregistrement de nouvelles entrées dans la base de données, dans notre application, correspond l'ajout d'un nouveau travail de diplôme.
 Pour ce faire, il faut cliquer sur se rendre sous "Ajouter un travail de bachelor" (toujours depuis la page de la liste des TB). Ensuite, il faut compléter le formulaire.
 Après avoir saisies les données, l'utilisateur est redirigé vers la page de la liste des TB.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Rendu final
+
+Les visiteurs ont accès à la page d'accueil, de connexion et d'inscription. Ils ne peuvent donc pas tester ni avoir
+accès aux fonctionnalités de l'application s'ils ne s'inscrivent ou ne se connectent pas.
+
+### Compte enseignant
+Un visiteur peut s'inscrire en tant qu'enseignant ou se connecter à son compte enseignant. Un enseignant peut : 
+- Voir la liste des bachelors proposés et l'utilisateur peut filtrer l'affichage des TB en fonction des tags,
+- Ajouter un nouveau bachelor,
+- Modifier un bachelor qu'il a ajouté,
+- Supprimer un bachelor qu'il a ajouté
+
+**A noter** que les opérations de modifications et de suppressions des bachelors s'appliquent pour tous les enseignants et tous les étudiants.
+Un bachelor supprimé ne sera plus visible dans la liste des bachelors proposés et également dans la liste des bachelors choisit par un étudiant.
+
+> Améliorations possibles (front)
+> - Dans l'idéal, il faudrait qu'un administrateur système créer le compte de l'enseignant en amount et qu'il ne soit possible de s'inscrire en tant qu'enseignant ou il faudrait qu'il y ait une vérification manuelle si un utilisateur s'inscrit en tant qu'enseignant
+> - Pour faciliter la gestion des bachelors entrés, il faudrait que les enseignants est une page qui leur permettent de modifier / supprimer les bachelors qu'ils ont ajoutés
+
+### Compte étudiant
+Un visiteur peut s'inscrire en tant qu'étudient ou se connecter à son compte étudiant. Un étudiant peut:
+- Voir la liste des bachelors proposés et l'utilisateur peut filtrer l'affichage des TB en fonction des tags,
+- Ajouter un bachelor dans sa liste de sélection
+- Retirer un bachelor de sa liste de sélection
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
