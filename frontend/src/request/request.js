@@ -21,19 +21,23 @@ export const SRV_STATUS = {
 
 // Documentation : https://axios-http.com/docs/interceptors
 
-axios.defaults.headers.common['Authorization'] = 'token ' + Cookie.getToken();
+
+//axios.defaults.headers.common['Authorization'] = 'token ' + Cookie.getToken();
+
 
 // Interceptor to check authorization
 axios.interceptors.request.use(
     (config) => {
 
         // URLs don't need token
-        const nonAuthRoutes = ['/register', '/login','/api/signup', '/api/login',];
+        const nonAuthRoutes = ['/login','/api/signup', '/api/login'];
 
         // Request without authorization needed
-        if (nonAuthRoutes.some((route) => config.url.includes(route))) {
+        if (nonAuthRoutes.some((route) => config.url.includes(route)) || router.currentRoute.value.name === 'register') {
           return config;
         }
+
+        axios.defaults.headers.common['Authorization'] = 'token ' + Cookie.getToken();
 
         // Check token: If doesn't exist, redirect to login page
         const token = Cookie.getToken();
@@ -91,6 +95,25 @@ class BackendRequest {
         }
     }
 
+    static async fetchOrientationById(id)
+    {
+        try
+        {
+            return await axios.get(BackendRequest.API_LINK + `api/orientation/${id}/`);
+        }
+        catch (error)
+        {
+            this.errorNotification(error, "Impossible de récupérer le détail sur l'orientation");
+            throw error;
+        }
+    }
+
+    static async getOrientationName(id)
+    {
+        const res = await BackendRequest.fetchOrientationById(id);
+        return res.data.name;
+    }
+
     /**
      * Uses axios to fetch all tags data from a specified API endpoint asynchronously.
      * Display a failure notification if there is an error.
@@ -146,8 +169,20 @@ class BackendRequest {
     {
         try
         {
+            let result;
             const res = await axios.get(`${(BackendRequest.API_LINK)}api/bachelor/`);
-            return res.data.sort((a, b) => b.id - a.id);
+            result = res.data;
+
+            if(Cookie.getUser().user_type === "student")
+            {
+                result = res.data.filter(bachelor => {
+                    if(bachelor.orientations.includes(Cookie.getUser().orientation)) {
+                        return bachelor;
+                    }
+                });
+            }
+
+            return result.sort((a, b) => b.id - a.id);
         }
         catch (error)
         {
@@ -169,10 +204,7 @@ class BackendRequest {
     {
         try
         {
-            const res = await axios.get(`${(this.API_LINK)}api/student/${id}/`);
-            // TODO
-            return res;
-            //return await axios.get(`${(this.API_LINK)}api/student/${id}/`);
+            return await axios.get(`${(this.API_LINK)}api/student/${id}/`);
         }
         catch (error)
         {

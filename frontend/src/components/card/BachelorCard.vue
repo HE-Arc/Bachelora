@@ -12,6 +12,15 @@
     },
   });
 
+  const bachelorOrientationsName = ref([]);
+  const fetchOrientationsNames = async () => {
+    for (const orientation of props.bachelor.orientations) {
+      const orientationName = await BackendRequest.getOrientationName(orientation);
+      bachelorOrientationsName.value.push(orientationName);
+    }
+  }
+
+
   const idUser = Cookie.getUser().id;
 
   const tagsItems = ref([]);
@@ -66,6 +75,8 @@
     {
       fetchSelectBachelor();
     }
+
+    fetchOrientationsNames();
   });
 
 </script>
@@ -81,6 +92,12 @@
           </div>
 
           <div class="text-overline">Proposé par : {{teacherName}}</div>
+
+          <div class="text-overline">Orientation :
+            <span v-for="(orientation, index) in bachelorOrientationsName" :key="orientation">
+              {{ orientation }}<span v-if="index < bachelorOrientationsName.length - 1">, </span>
+            </span>
+          </div>
 
           <div>
             <q-chip v-for="tag in tagsItems" :key="tag">

@@ -13,7 +13,17 @@ const id = computed(() => route.params.id);
 const bachelor = ref([]);
 const fetchBachelor = async () => {
   bachelor.value = await BackendRequest.fetchBachelorById(id.value);
+
+  fetchOrientationsNames();
 };
+
+const bachelorOrientationsName = ref([]);
+const fetchOrientationsNames = async () => {
+  for (const orientation of bachelor.value.orientations) {
+    const orientationName = await BackendRequest.getOrientationName(orientation);
+    bachelorOrientationsName.value.push(orientationName);
+  }
+}
 
 onMounted(() => {
   fetchBachelor();
@@ -33,6 +43,10 @@ onMounted(() => {
       <br>
 
       <p>Enseignant ayant entré le travail : <em>{{ bachelor.teacherName }}</em></p>
+
+      <p>Orientation : <em v-for="(orientation, index) in bachelorOrientationsName" :key="orientation">
+        {{ orientation }} <span v-if="index < bachelorOrientationsName.length - 1">, </span></em>
+      </p>
 
       <div class="text-center">
         <q-chip v-for="tag in bachelor.tagsItems" :key="tag">
