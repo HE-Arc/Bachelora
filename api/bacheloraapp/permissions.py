@@ -16,28 +16,36 @@ class IsAdminOrReadOnly(BasePermission):
 class IsTeacherOwnerOrReadOnly(BasePermission):
     def has_permission(self, request, view):
         # Autoriser la lecture GET, HEAD ou OPTIONS
-        if request.method in ['GET', 'HEAD', 'OPTIONS']:
+        if request.method in permissions.SAFE_METHODS:
             return True
+       
         # Autoriser la création de nouveaux objets uniquement si l'utilisateur est un enseignant
-        elif request.method == 'POST' and request.user.user_type == 'teacher':
-            return True
-        return False
+        return request.user and request.user.user_type == 'teacher'
 
     def has_object_permission(self, request, view, obj):
-        # Autoriser les enseignants à modifier les objets qu'ils possèdent
-        if request.method in ['PUT', 'PATCH', 'DELETE'] and obj.teacher == request.user.teacher:
+        if request.method in permissions.SAFE_METHODS:
             return True
-        return False
+        
+        # Autoriser les enseignants à modifier les objets qu'ils possèdent
+        if obj.teacher != request.user.teacher:
+            raise PermissionDenied("You are not allowed to perform this action on this object")
+        
+        return True
     
 class IsStudentOwnerOrReadOnly(BasePermission):
     def has_object_permission(self, request, view, obj):
         # Autoriser les étudiants à modifier les objets qu'ils possèdent
-        if request.method == 'POST' and obj.student == request.user.student:
+        if request.method in ['POST', 'DELETE'] and obj.student == request.user.student:
             return True
         return False
 
 class ReadOnly(BasePermission):
     def has_permission(self, request, view):
+        if request.method != 'GET':
+            raise PermissionDenied(f"{request.method} method is not allowed on this endpoint")
+        return True
+    
+    def has_object_permission(self, request, view, obj):
         if request.method != 'GET':
             raise PermissionDenied(f"{request.method} method is not allowed on this endpoint")
         return True
