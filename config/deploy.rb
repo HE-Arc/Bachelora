@@ -57,7 +57,7 @@ namespace :deploy do
     task :migrate_database do
       on roles(:app) do
         within release_path.join('api') do
-          execute :python, 'manage.py migrate'
+          execute :python, 'manage.py migrate --noinput'
         end
       end
     end
