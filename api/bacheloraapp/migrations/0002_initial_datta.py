@@ -13,9 +13,9 @@ def create_initial_data(apps, schema_editor):
     
     # Load some initial orientations
     Orientation = apps.get_model('bacheloraapp', 'Orientation')
-    orientID = Orientation.objects.create(name='ID')
-    orientIL = Orientation.objects.create(name='IL')
-    orientIE = Orientation.objects.create(name='IE')
+    orientID = Orientation.objects.create(name='ISC-id')
+    orientIL = Orientation.objects.create(name='ISC-il')
+    orientIE = Orientation.objects.create(name='ISC-ie')
     
     # Load some initial Teacher
     Teacher = apps.get_model('bacheloraapp', 'Teacher')

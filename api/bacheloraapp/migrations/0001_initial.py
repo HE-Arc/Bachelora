@@ -48,14 +48,14 @@ class Migration(migrations.Migration):
             name='Orientation',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=5)),
+                ('name', models.CharField(max_length=10)),
             ],
         ),
         migrations.CreateModel(
             name='Tag',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=12)),
+                ('name', models.CharField(max_length=25)),
             ],
         ),
         migrations.CreateModel(
