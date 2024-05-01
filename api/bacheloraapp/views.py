@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -8,6 +8,7 @@ from rest_framework.decorators import action, api_view, authentication_classes, 
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from .views import *
 from .serializers import *
@@ -19,7 +20,6 @@ class BachelorViewSet(viewsets.ModelViewSet):
     """
     queryset = Bachelor.objects.all()
     serializer_class = BachelorSerializer
-    allowed_methods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
     authentication_classes = [SessionAuthentication, TokenAuthentication]
     permission_classes = [IsAuthenticated, IsTeacherOwnerOrReadOnly]
 
@@ -31,11 +31,11 @@ class BachelorViewSet(viewsets.ModelViewSet):
             try:
                 tag = Tag.objects.get(id=tag_id)
                 bachelor.tags.add(tag)
-                return Response({'status': 'Tag added successfully'}, status=200)
+                return Response({'status': 'Tag added successfully'}, status=status.HTTP_200_OK)
             except Tag.DoesNotExist:
-                return Response({'error': 'Tag does not exist'}, status=404)
+                return Response({'error': 'Tag does not exist'}, status=status.HTTP_404_NOT_FOUND)
         else:
-            return Response({'error': 'Please provide tag_id'}, status=400)
+            return Response({'error': 'Please provide tag_id'}, status=status.HTTP_400_BAD_REQUEST)
         
     @action(detail=True, methods=['delete'])
     def remove_tag(self, request, pk=None):
@@ -45,11 +45,11 @@ class BachelorViewSet(viewsets.ModelViewSet):
             try:
                 tag = Tag.objects.get(id=tag_id)
                 bachelor.tags.remove(tag)
-                return Response({'status': 'Tag removed successfully'}, status=200)
+                return Response({'status': 'Tag removed successfully'}, status=status.HTTP_200_OK)
             except Tag.DoesNotExist:
-                return Response({'error': 'Tag does not exist'}, status=404)
+                return Response({'error': 'Tag does not exist'}, status=status.HTTP_404_NOT_FOUND)
         else:
-            return Response({'error': 'Please provide tag_id'}, status=400)
+            return Response({'error': 'Please provide tag_id'}, status=status.HTTP_400_BAD_REQUEST)
         
     @action(detail=True, methods=['post'])
     def add_orientation(self, request, pk=None):
@@ -59,11 +59,11 @@ class BachelorViewSet(viewsets.ModelViewSet):
             try:
                 orientation = Orientation.objects.get(id=orientation_id)
                 bachelor.orientations.add(orientation)
-                return Response({'status': 'Orientation added successfully'}, status=200)
+                return Response({'status': 'Orientation added successfully'}, status=status.HTTP_200_OK)
             except Orientation.DoesNotExist:
-                return Response({'error': 'Orientation does not exist'}, status=404)
+                return Response({'error': 'Orientation does not exist'}, status=status.HTTP_404_NOT_FOUND)
         else:
-            return Response({'error': 'Please provide orientation_id'}, status=400)
+            return Response({'error': 'Please provide orientation_id'}, status=status.HTTP_400_BAD_REQUEST)
         
     @action(detail=True, methods=['delete'])
     def remove_orientation(self, request, pk=None):
@@ -73,11 +73,11 @@ class BachelorViewSet(viewsets.ModelViewSet):
             try:
                 orientation = Orientation.objects.get(id=orientation_id)
                 bachelor.orientations.remove(orientation)
-                return Response({'status': 'Orientation removed successfully'}, status=200)
+                return Response({'status': 'Orientation removed successfully'}, status=status.HTTP_200_OK)
             except Orientation.DoesNotExist:
-                return Response({'error': 'Orientation does not exist'}, status=404)
+                return Response({'error': 'Orientation does not exist'}, status=status.HTTP_404_NOT_FOUND)
         else:
-            return Response({'error': 'Please provide orientation_id'}, status=400)
+            return Response({'error': 'Please provide orientation_id'}, status=status.HTTP_400_BAD_REQUEST)
 
 class OrientationViewSet(viewsets.ModelViewSet):
     """
@@ -85,9 +85,8 @@ class OrientationViewSet(viewsets.ModelViewSet):
     """
     queryset = Orientation.objects.all()
     serializer_class = OrientationSerializer
-    allowed_methods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
     authentication_classes = [SessionAuthentication, TokenAuthentication]
-    permission_classes = [IsAuthenticated, IsAdminOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly, IsAdminOrReadOnly]
 
 class TagViewSet(viewsets.ModelViewSet):
     """
@@ -95,7 +94,6 @@ class TagViewSet(viewsets.ModelViewSet):
     """
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-    allowed_methods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
     authentication_classes = [SessionAuthentication, TokenAuthentication]
     permission_classes = [IsAuthenticated, IsAdminOrReadOnly]
 
@@ -116,11 +114,11 @@ class StudentViewSet(viewsets.ModelViewSet):
             try:
                 bachelor = Bachelor.objects.get(id=bachelor_id)
                 student.bachelors.add(bachelor)
-                return Response({'status': 'Bachelor added successfully'}, status=200)
+                return Response({'status': 'Bachelor added successfully'}, status=status.HTTP_200_OK)
             except Bachelor.DoesNotExist:
-                return Response({'error': 'Bachelor does not exist'}, status=404)
+                return Response({'error': 'Bachelor does not exist'}, status=status.HTTP_404_NOT_FOUND)
         else:
-            return Response({'error': 'Please provide bachelor_id'}, status=400)
+            return Response({'error': 'Please provide bachelor_id'}, status=status.HTTP_400_BAD_REQUEST)
         
     @action(detail=True, methods=['delete'], permission_classes=[IsAuthenticated, IsStudentOwnerOrReadOnly])
     def remove_bachelor(self, request, pk=None):
@@ -130,11 +128,11 @@ class StudentViewSet(viewsets.ModelViewSet):
             try:
                 bachelor = Bachelor.objects.get(id=bachelor_id)
                 student.bachelors.remove(bachelor)
-                return Response({'status': 'Bachelor removed successfully'}, status=200)
+                return Response({'status': 'Bachelor removed successfully'}, status=status.HTTP_200_OK)
             except Bachelor.DoesNotExist:
-                return Response({'error': 'Bachelor does not exist'}, status=404)
+                return Response({'error': 'Bachelor does not exist'}, status=status.HTTP_404_NOT_FOUND)
         else:
-            return Response({'error': 'Please provide bachelor_id'}, status=400)
+            return Response({'error': 'Please provide bachelor_id'}, status=status.HTTP_400_BAD_REQUEST)
 
 class TeacherViewSet(viewsets.ModelViewSet):
     """
