@@ -21,10 +21,6 @@ export const SRV_STATUS = {
 
 // Documentation : https://axios-http.com/docs/interceptors
 
-
-//axios.defaults.headers.common['Authorization'] = 'token ' + Cookie.getToken();
-
-
 // Interceptor to check authorization
 axios.interceptors.request.use(
     (config) => {
