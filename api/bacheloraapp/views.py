@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
+from django.contrib.auth.hashers import make_password
 User = get_user_model()
 
 from rest_framework import viewsets, status
@@ -168,8 +169,7 @@ class Authentification():
             user_type = request.data['user_type']
         
         if 'password' in request.data: 
-            password = request.data['password']
-            request.data['password'] = '???'
+            request.data['password'] = make_password(request.data['password'])
 
         if user_type == 'student':
             serializer = StudentSerializer(data=request.data, context={'request': request})
@@ -181,15 +181,9 @@ class Authentification():
         if serializer.is_valid():
             serializer.save()
             user = User.objects.get(username=request.data['username'])
-            user.set_password(password)
-            user.save()
             token = Token.objects.create(user=user)
             
-            user_serializer = Authentification.get_serializer(user, request)
-            if user_serializer is None:
-                return Response({"Detail": "Internal error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-            
-            return Response({"token": token.key, "user": user_serializer.data}, status=status.HTTP_201_CREATED)
+            return Response({"token": token.key, "user": serializer.data}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @api_view(['GET'])
